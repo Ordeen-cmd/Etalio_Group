@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ETALIO · Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
+  <style>
+    /* ---------- RESET & VARIABLES ---------- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --slate-50: #f8fafc;
+      --slate-200: #e2e8f0;
+      --slate-600: #475569;
+      --slate-700: #334155;
+      --slate-800: #1e293b;
+      --slate-900: #0f172a;
+      --white: #ffffff;
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.02);
+      --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.04);
+      --radius: 0.75rem;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--slate-50);
+      color: var(--slate-900);
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ---------- SIDEBAR ---------- */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 260px;
+      height: 100vh;
+      background: var(--white);
+      border-right: 1px solid var(--slate-200);
+      padding: 1.5rem 1rem;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.25s ease;
+      z-index: 50;
+      overflow-y: auto;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .sidebar-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 2.5rem;
+      padding-left: 0.25rem;
+    }
+
+    .brand-icon {
+      width: 2.4rem;
+      height: 2.4rem;
+      background: var(--primary);
+      border-radius: 0.65rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .brand-word {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .brand-word span {
+      color: var(--primary);
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .sidebar-nav a {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.7rem 0.9rem;
+      border-radius: var(--radius);
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--slate-700);
+      text-decoration: none;
+      transition: background 0.12s, color 0.12s;
+    }
+
+    .sidebar-nav a:hover {
+      background: #f1f5f9;
+      color: var(--slate-900);
+    }
+    .sidebar-nav a.active {
+      background: #eef2ff;
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .sidebar-nav a svg {
+      width: 1.25rem;
+      height: 1.25rem;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      flex-shrink: 0;
+    }
+
+    .sidebar-footer {
+      border-top: 1px solid #eef2f6;
+      padding-top: 1.2rem;
+      font-size: 0.75rem;
+      color: var(--slate-600);
+    }
+
+    /* ---------- MAIN CONTENT ---------- */
+    .main {
+      margin-left: 260px;
+      flex: 1;
+      padding: 1.5rem 2rem 2.5rem;
+      min-height: 100vh;
+      transition: margin 0.2s;
+    }
+
+    /* ---------- TOP NAVBAR ---------- */
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .menu-toggle {
+      background: transparent;
+      border: none;
+      font-size: 1.6rem;
+      padding: 0.2rem 0.4rem;
+      cursor: pointer;
+      color: var(--slate-800);
+      display: none;
+      border-radius: 0.5rem;
+      line-height: 1;
+    }
+    .menu-toggle:hover {
+      background: #f1f5f9;
+    }
+
+    .page-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    .notification-btn {
+      background: transparent;
+      border: none;
+      padding: 0.4rem;
+      cursor: pointer;
+      border-radius: 9999px;
+      transition: background 0.12s;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .notification-btn:hover {
+      background: #f1f5f9;
+    }
+    .notification-dot {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      width: 0.6rem;
+      height: 0.6rem;
+      background: #dc2626;
+      border-radius: 999px;
+      border: 2px solid white;
+    }
+
+    .user-menu {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      cursor: pointer;
+      padding: 0.25rem 0.6rem 0.25rem 0.8rem;
+      border-radius: 2rem;
+      background: white;
+      border: 1px solid var(--slate-200);
+      transition: border 0.1s;
+      user-select: none;
+    }
+    .user-menu:hover {
+      border-color: #94a3b8;
+    }
+
+    .user-avatar {
+      width: 2rem;
+      height: 2rem;
+      background: var(--primary);
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+      font-size: 0.8rem;
+    }
+    .user-name {
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+
+    .user-dropdown {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      background: white;
+      border: 1px solid var(--slate-200);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-md);
+      min-width: 160px;
+      padding: 0.3rem 0;
+      display: none;
+      z-index: 60;
+    }
+    .user-dropdown.show {
+      display: block;
+    }
+    .user-dropdown a {
+      display: block;
+      padding: 0.5rem 1.2rem;
+      font-size: 0.85rem;
+      color: var(--slate-800);
+      text-decoration: none;
+      transition: background 0.08s;
+    }
+    .user-dropdown a:hover {
+      background: #f1f5f9;
+    }
+
+    /* ---------- STATS GRID ---------- */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background: white;
+      border: 1px solid var(--slate-200);
+      border-radius: var(--radius);
+      padding: 1.2rem 1rem;
+      box-shadow: var(--shadow-sm);
+      transition: box-shadow 0.15s;
+    }
+    .stat-card:hover {
+      box-shadow: var(--shadow-md);
+    }
+
+    .stat-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--slate-600);
+    }
+    .stat-value {
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-top: 0.25rem;
+    }
+    .stat-sub {
+      font-size: 0.75rem;
+      color: var(--slate-600);
+      margin-top: 0.2rem;
+    }
+
+    /* ---------- ROW TWO COL ---------- */
+    .row-two-col {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .card {
+      background: white;
+      border: 1px solid var(--slate-200);
+      border-radius: var(--radius);
+      padding: 1.2rem 1.2rem 1.5rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+    .card-title {
+      font-weight: 600;
+      font-size: 1rem;
+    }
+    .card-badge {
+      background: #f1f5f9;
+      padding: 0.2rem 0.7rem;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      font-weight: 500;
+      color: var(--slate-800);
+    }
+
+    /* chart */
+    .chart-container {
+      width: 100%;
+      height: 120px;
+    }
+    .chart-container svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    /* tables */
+    .table-wrap {
+      overflow-x: auto;
+      margin-top: 0.25rem;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+    th {
+      text-align: left;
+      padding: 0.5rem 0.2rem 0.6rem 0;
+      font-weight: 600;
+      color: var(--slate-600);
+      border-bottom: 1px solid #eef2f6;
+    }
+    td {
+      padding: 0.6rem 0.2rem 0.6rem 0;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 0.15rem 0.6rem;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      font-weight: 500;
+    }
+    .status-success {
+      background: #dcfce7;
+      color: #166534;
+    }
+    .status-warning {
+      background: #fef9c3;
+      color: #854d0e;
+    }
+    .status-danger {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+    .status-info {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+
+    /* low stock items */
+    .low-stock-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.4rem 0;
+      border-bottom: 1px solid #f1f5f9;
+      font-size: 0.85rem;
+    }
+    .low-stock-item:last-child {
+      border-bottom: none;
+    }
+    .low-stock-count {
+      font-weight: 600;
+      color: #dc2626;
+    }
+
+    /* conversation counter */
+    .conversation-counter {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      background: #f1f5f9;
+      padding: 0.5rem 1rem;
+      border-radius: 2rem;
+      width: fit-content;
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+    .conversation-counter .num {
+      background: var(--primary);
+      color: white;
+      padding: 0.1rem 0.6rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+    }
+
+    /* ---------- RESPONSIVE ---------- */
+    @media (max-width: 1024px) {
+      .stats-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .row-two-col {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+      }
+      .sidebar.open {
+        transform: translateX(0);
+      }
+      .main {
+        margin-left: 0;
+        padding: 1rem 1rem 2rem;
+      }
+      .menu-toggle {
+        display: inline-block;
+      }
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .page-title {
+        font-size: 1.2rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+      .topbar-right {
+        gap: 0.75rem;
+      }
+      .user-name {
+        display: none;
+      }
+    }
+
+    /* overlay */
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.08);
+      z-index: 40;
+    }
+    .overlay.show {
+      display: block;
+    }
+
+    .flex {
+      display: flex;
+      align-items: center;
+    }
+    .gap-1 {
+      gap: 0.5rem;
+    }
+    .mt-2 {
+      margin-top: 0.75rem;
+    }
+    .text-muted {
+      color: var(--slate-600);
+      font-size: 0.8rem;
+    }
+
+    /* ---------- LOGIN OVERLAY ---------- */
+    .login-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: var(--slate-50);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      transition: opacity 0.2s ease;
+    }
+    .login-overlay.hidden {
+      display: none;
+    }
+    .login-overlay .login-card {
+      max-width: 420px;
+      width: 100%;
+      background: var(--white);
+      border-radius: 1rem;
+      padding: 2.25rem 2rem 2.5rem;
+      box-shadow: 0 12px 40px rgba(15, 23, 42, 0.06), 0 4px 12px rgba(0, 0, 0, 0.03);
+      border: 1px solid var(--slate-200);
+    }
+    .login-overlay .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .login-overlay .brand-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.5rem;
+      height: 2.5rem;
+      background: var(--primary);
+      border-radius: 0.65rem;
+      color: white;
+      font-weight: 700;
+      font-size: 1.3rem;
+      box-shadow: 0 4px 8px rgba(79, 70, 229, 0.15);
+    }
+    .login-overlay .brand-wordmark {
+      font-size: 1.75rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: var(--slate-900);
+      line-height: 1.2;
+    }
+    .login-overlay .brand-wordmark span { color: var(--primary); }
+    .login-overlay .login-subtitle {
+      font-size: 0.95rem;
+      color: var(--slate-600);
+      margin-bottom: 2rem;
+      border-left: 3px solid var(--primary);
+      padding-left: 0.75rem;
+    }
+    .login-overlay .form-group { margin-bottom: 1.25rem; }
+    .login-overlay label {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--slate-800);
+      margin-bottom: 0.35rem;
+    }
+    .login-overlay .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .login-overlay .input-wrapper input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      padding-right: 3rem;
+      font-size: 0.95rem;
+      font-family: 'Inter', sans-serif;
+      background: var(--white);
+      border: 1px solid var(--slate-200);
+      border-radius: 0.75rem;
+      transition: border 0.15s ease, box-shadow 0.15s ease;
+      color: var(--slate-900);
+      outline: none;
+      height: 3.25rem;
+    }
+    .login-overlay .input-wrapper input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+    }
+    .login-overlay .input-wrapper input.input-error {
+      border-color: #dc2626;
+      box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.12);
+    }
+    .login-overlay .toggle-password {
+      position: absolute;
+      right: 0.75rem;
+      background: transparent;
+      border: none;
+      padding: 0.4rem;
+      cursor: pointer;
+      color: #64748b;
+      transition: color 0.15s;
+    }
+    .login-overlay .toggle-password:hover { color: var(--slate-900); }
+    .login-overlay .toggle-password svg {
+      width: 1.3rem;
+      height: 1.3rem;
+      display: block;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .login-overlay .error-message {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      margin-top: 0.4rem;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: #dc2626;
+      min-height: 1.4rem;
+    }
+    .login-overlay .error-message.hidden { display: none; }
+    .login-overlay .error-message svg {
+      width: 1rem;
+      height: 1rem;
+      flex-shrink: 0;
+      stroke: #dc2626;
+      fill: none;
+      stroke-width: 2.5;
+    }
+    .login-overlay .login-btn {
+      width: 100%;
+      padding: 0.8rem 1.5rem;
+      margin-top: 0.75rem;
+      background: var(--primary);
+      color: white;
+      font-weight: 600;
+      font-size: 1rem;
+      font-family: 'Inter', sans-serif;
+      border: none;
+      border-radius: 0.75rem;
+      cursor: pointer;
+      transition: background 0.15s ease, box-shadow 0.15s ease;
+      box-shadow: 0 4px 10px rgba(79, 70, 229, 0.2);
+      height: 3.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+    }
+    .login-overlay .login-btn:hover:not(:disabled) {
+      background: var(--primary-hover);
+      box-shadow: 0 6px 14px rgba(79, 70, 229, 0.25);
+    }
+    .login-overlay .login-btn:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+    .login-overlay .login-btn .spinner {
+      display: inline-block;
+      width: 1.2rem;
+      height: 1.2rem;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #ffffff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @media (max-width: 480px) {
+      .login-overlay .login-card { padding: 1.75rem 1.25rem 2rem; }
+      .login-overlay .brand-wordmark { font-size: 1.5rem; }
+      .login-overlay .login-subtitle { font-size: 0.85rem; margin-bottom: 1.75rem; }
+    }
+  </style>
+</head>
+<body>
+  <!-- ===== LOGIN OVERLAY ===== -->
+  <div class="login-overlay" id="loginOverlay">
+    <div class="login-card">
+      <div class="brand">
+        <div class="brand-icon">E</div>
+        <div class="brand-wordmark">ETAL<span>IO</span></div>
+      </div>
+      <div class="login-subtitle">Sistem Operasional Bisnis Cerdas</div>
+      <form id="loginForm" novalidate autocomplete="off">
+        <div class="form-group">
+          <label for="loginEmail">Email</label>
+          <div class="input-wrapper">
+            <input type="email" id="loginEmail" placeholder="nama@perusahaan.com" autocomplete="username" required>
+          </div>
+          <div id="loginEmailError" class="error-message hidden" role="alert">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <span>Email wajib diisi</span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="loginPassword">Kata Sandi</label>
+          <div class="input-wrapper">
+            <input type="password" id="loginPassword" placeholder="Masukkan kata sandi" autocomplete="current-password" required>
+            <button type="button" class="toggle-password" id="togglePasswordBtn" aria-label="Tampilkan atau sembunyikan kata sandi">
+              <svg viewBox="0 0 24 24" id="eyeIcon"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+          <div id="loginPasswordError" class="error-message hidden" role="alert">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <span>Kata sandi minimal 6 karakter</span>
+          </div>
+        </div>
+        <div id="loginAuthError" class="error-message hidden" style="margin-bottom:0.75rem;" role="alert">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <span id="loginAuthErrorText">Email atau kata sandi salah</span>
+        </div>
+        <button type="submit" class="login-btn" id="loginBtn">
+          <span id="loginBtnText">Masuk</span>
+          <span id="loginBtnSpinner" class="spinner" style="display:none;"></span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- overlay for mobile -->
+  <div class="overlay" id="overlay"></div>
+
+  <!-- ===== SIDEBAR ===== -->
+  <aside class="sidebar" id="sidebar" role="navigation" aria-label="Sidebar navigation">
+    <div class="sidebar-brand">
+      <div class="brand-icon">E</div>
+      <div class="brand-word">ETAL<span>IO</span></div>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="index.html" class="active">
+        <svg viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0a1 1 0 01-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 01-1 1"/></svg>
+        Dashboard
+      </a>
+      <a href="orders.html">
+        <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
+        Orders
+      </a>
+      <a href="products.html">
+        <svg viewBox="0 0 24 24"><path d="M12 2v20M2 12h20"/></svg>
+        Products
+      </a>
+      <a href="customers.html">
+        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        Customers
+      </a>
+      <a href="payments.html">
+        <svg viewBox="0 0 24 24"><path d="M12 2v20M2 12h20"/></svg>
+        Payments
+      </a>
+      <a href="users.html">
+        <svg viewBox="0 0 24 24"><path d="M12 2v20M2 12h20"/></svg>
+        Users
+      </a>
+    </nav>
+    <div class="sidebar-footer">ETALIO v1.0 · Internal</div>
+  </aside>
+
+  <!-- ===== MAIN ===== -->
+  <main class="main" id="mainContent">
+    <!-- Topbar -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation menu" aria-expanded="false">☰</button>
+        <h1 class="page-title">Dashboard</h1>
+      </div>
+      <div class="topbar-right">
+        <button class="notification-btn" aria-label="Notifications">
+          <svg width="22" height="22" viewBox="0 0 24 24" stroke="#1e293b"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+          <span class="notification-dot"></span>
+        </button>
+        <div class="user-menu" id="userMenu" role="button" tabindex="0" aria-haspopup="true" aria-expanded="false">
+          <div class="user-avatar">A</div>
+          <span class="user-name">Admin</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" stroke="#475569"><polyline points="6 9 12 15 18 9"/></svg>
+          <div class="user-dropdown" id="userDropdown">
+            <a href="users-detail.html">Profil</a>
+            <a href="users-detail.html">Pengaturan</a>
+            <a href="#" id="logoutBtn">Keluar</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- 6 Statistic Cards -->
+    <section class="stats-grid">
+      <div class="stat-card"><div class="stat-label">Orders Today</div><div class="stat-value">47</div><div class="stat-sub">+12% from yesterday</div></div>
+      <div class="stat-card"><div class="stat-label">Revenue Today</div><div class="stat-value">Rp 8.2M</div><div class="stat-sub">+8%</div></div>
+      <div class="stat-card"><div class="stat-label">Pending Payment</div><div class="stat-value">14</div><div class="stat-sub">3 need attention</div></div>
+      <div class="stat-card"><div class="stat-label">Customers</div><div class="stat-value">328</div><div class="stat-sub">+4 this week</div></div>
+      <div class="stat-card"><div class="stat-label">Active Conversations</div><div class="stat-value">23</div><div class="stat-sub">8 unread</div></div>
+      <div class="stat-card"><div class="stat-label">Low Stock</div><div class="stat-value">5</div><div class="stat-sub">2 critical</div></div>
+    </section>
+
+    <!-- Revenue Chart + Pending Payments -->
+    <div class="row-two-col">
+      <!-- Revenue Overview -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Revenue Overview</span>
+          <span class="card-badge">Last 7 days</span>
+        </div>
+        <div class="chart-container" aria-label="Revenue line chart">
+          <svg viewBox="0 0 400 100" preserveAspectRatio="none">
+            <polyline points="0,85 50,70 100,55 150,75 200,30 250,50 300,15 350,40 400,25" stroke="#4f46e5" stroke-width="2.5" fill="none" stroke-linejoin="round"/>
+            <polygon points="0,85 50,70 100,55 150,75 200,30 250,50 300,15 350,40 400,25 400,100 0,100" fill="#4f46e5" opacity="0.06"/>
+            <circle cx="0" cy="85" r="3" fill="#4f46e5"/>
+            <circle cx="50" cy="70" r="3" fill="#4f46e5"/>
+            <circle cx="100" cy="55" r="3" fill="#4f46e5"/>
+            <circle cx="150" cy="75" r="3" fill="#4f46e5"/>
+            <circle cx="200" cy="30" r="3" fill="#4f46e5"/>
+            <circle cx="250" cy="50" r="3" fill="#4f46e5"/>
+            <circle cx="300" cy="15" r="3" fill="#4f46e5"/>
+            <circle cx="350" cy="40" r="3" fill="#4f46e5"/>
+            <circle cx="400" cy="25" r="3" fill="#4f46e5"/>
+          </svg>
+        </div>
+        <div class="flex gap-1 mt-2"><span class="text-muted">Total this week:</span><strong>Rp 57.4M</strong></div>
+      </div>
+
+      <!-- Pending Payments -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Pending Payments</span>
+          <span class="card-badge">14 invoices</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Customer</th><th>Amount</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td>PT Nusantara</td><td>Rp 2.4M</td><td><span class="status-badge status-warning">Waiting</span></td></tr>
+              <tr><td>CV Karya</td><td>Rp 1.2M</td><td><span class="status-badge status-danger">Overdue</span></td></tr>
+              <tr><td>UD Sumber</td><td>Rp 850K</td><td><span class="status-badge status-info">Verified</span></td></tr>
+              <tr><td>Fa Berkah</td><td>Rp 3.1M</td><td><span class="status-badge status-warning">Waiting</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Orders + Low Stock + Active Conversations -->
+    <div class="row-two-col" style="margin-bottom: 1rem;">
+      <!-- Recent Orders -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Recent Orders</span>
+          <span class="card-badge">5 latest</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Order ID</th><th>Customer</th><th>Total</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td>#ET-1024</td><td>Andi Wijaya</td><td>Rp 2.1M</td><td><span class="status-badge status-success">Paid</span></td></tr>
+              <tr><td>#ET-1023</td><td>Siti Rahma</td><td>Rp 920K</td><td><span class="status-badge status-warning">Processing</span></td></tr>
+              <tr><td>#ET-1022</td><td>Budi Santoso</td><td>Rp 4.3M</td><td><span class="status-badge status-success">Paid</span></td></tr>
+              <tr><td>#ET-1021</td><td>Dewi Lestari</td><td>Rp 1.6M</td><td><span class="status-badge status-danger">Cancelled</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Low Stock + Active Conversations -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Low Stock Alert</span>
+          <span class="card-badge">5 items</span>
+        </div>
+        <div class="low-stock-item"><span>Arabica Coffee</span><span class="low-stock-count">2 kg left</span></div>
+        <div class="low-stock-item"><span>Palm Sugar</span><span class="low-stock-count">5 kg left</span></div>
+        <div class="low-stock-item"><span>500ml Bottle</span><span class="low-stock-count">12 pcs left</span></div>
+        <div class="low-stock-item"><span>Medium Box</span><span class="low-stock-count">8 pcs left</span></div>
+        <div class="low-stock-item"><span>Twine Rope</span><span class="low-stock-count">3 rolls left</span></div>
+
+        <div style="margin-top: 1.2rem; border-top: 1px solid #eef2f6; padding-top: 1rem;">
+          <div class="conversation-counter">
+            <span>Active Conversations</span>
+            <span class="num">23</span>
+            <span style="font-weight:400; color:#475569; font-size:0.8rem;">8 need reply</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    (function() {
+      // ---- Login Guard ----
+      var loginOverlay = document.getElementById('loginOverlay');
+
+      function isLoggedIn() {
+        return sessionStorage.getItem('loggedIn') === 'true';
+      }
+
+      if (isLoggedIn()) {
+        loginOverlay.classList.add('hidden');
+      }
+
+      // ---- Login Form ----
+      var loginForm = document.getElementById('loginForm');
+      var loginEmail = document.getElementById('loginEmail');
+      var loginPassword = document.getElementById('loginPassword');
+      var loginEmailError = document.getElementById('loginEmailError');
+      var loginPasswordError = document.getElementById('loginPasswordError');
+      var loginAuthError = document.getElementById('loginAuthError');
+      var loginAuthErrorText = document.getElementById('loginAuthErrorText');
+      var loginBtn = document.getElementById('loginBtn');
+      var loginBtnText = document.getElementById('loginBtnText');
+      var loginBtnSpinner = document.getElementById('loginBtnSpinner');
+      var togglePasswordBtn = document.getElementById('togglePasswordBtn');
+      var eyeIcon = document.getElementById('eyeIcon');
+
+      function setLoginLoading(isLoading) {
+        loginBtn.disabled = isLoading;
+        loginBtnText.textContent = isLoading ? 'Memproses' : 'Masuk';
+        loginBtnSpinner.style.display = isLoading ? 'inline-block' : 'none';
+      }
+
+      function hideAllLoginErrors() {
+        loginEmailError.classList.add('hidden');
+        loginPasswordError.classList.add('hidden');
+        loginAuthError.classList.add('hidden');
+        loginEmail.classList.remove('input-error');
+        loginPassword.classList.remove('input-error');
+      }
+
+      if (loginEmail) {
+        loginEmail.addEventListener('input', function() {
+          loginEmailError.classList.add('hidden');
+          loginEmail.classList.remove('input-error');
+          loginAuthError.classList.add('hidden');
+        });
+      }
+      if (loginPassword) {
+        loginPassword.addEventListener('input', function() {
+          loginPasswordError.classList.add('hidden');
+          loginPassword.classList.remove('input-error');
+          loginAuthError.classList.add('hidden');
+        });
+      }
+
+      // toggle password
+      var passwordVisible = false;
+      if (togglePasswordBtn) {
+        togglePasswordBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          passwordVisible = !passwordVisible;
+          loginPassword.type = passwordVisible ? 'text' : 'password';
+          eyeIcon.innerHTML = passwordVisible
+            ? '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/><line x1="4.22" y1="4.22" x2="19.78" y2="19.78"/>'
+            : '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+        });
+      }
+
+      if (loginForm) {
+        loginForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          hideAllLoginErrors();
+          var email = loginEmail.value;
+          var password = loginPassword.value;
+          var hasError = false;
+
+          if (email.trim() === '') {
+            loginEmailError.classList.remove('hidden');
+            loginEmail.classList.add('input-error');
+            loginEmail.focus();
+            hasError = true;
+          } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+            loginEmailError.querySelector('span').textContent = 'Masukkan email yang valid';
+            loginEmailError.classList.remove('hidden');
+            loginEmail.classList.add('input-error');
+            loginEmail.focus();
+            hasError = true;
+          }
+
+          if (!hasError && password.length === 0) {
+            loginPasswordError.querySelector('span').textContent = 'Kata sandi wajib diisi';
+            loginPasswordError.classList.remove('hidden');
+            loginPassword.classList.add('input-error');
+            loginPassword.focus();
+            hasError = true;
+          } else if (!hasError && password.length < 6) {
+            loginPasswordError.querySelector('span').textContent = 'Kata sandi minimal 6 karakter';
+            loginPasswordError.classList.remove('hidden');
+            loginPassword.classList.add('input-error');
+            loginPassword.focus();
+            hasError = true;
+          }
+
+          if (hasError) return;
+
+          setLoginLoading(true);
+          setTimeout(function() {
+            if (email.trim().toLowerCase() === 'admin@etalio.com' && password === 'password123') {
+              sessionStorage.setItem('loggedIn', 'true');
+              loginOverlay.classList.add('hidden');
+              setLoginLoading(false);
+              loginForm.reset();
+              hideAllLoginErrors();
+            } else {
+              setLoginLoading(false);
+              loginAuthErrorText.textContent = 'Email atau kata sandi salah';
+              loginAuthError.classList.remove('hidden');
+              loginEmail.classList.add('input-error');
+              loginPassword.classList.add('input-error');
+              loginEmail.focus();
+            }
+          }, 1200 + Math.random() * 600);
+        });
+      }
+
+      // ---- Sidebar toggle (mobile) ----
+      var sidebar = document.getElementById('sidebar');
+      var overlay = document.getElementById('overlay');
+      var menuToggle = document.getElementById('menuToggle');
+
+      function toggleSidebar(forceState) {
+        var isOpen = (forceState !== undefined) ? forceState : !sidebar.classList.contains('open');
+        sidebar.classList.toggle('open', isOpen);
+        overlay.classList.toggle('show', isOpen);
+        menuToggle.setAttribute('aria-expanded', isOpen);
+      }
+
+      menuToggle.addEventListener('click', function(e) {
+        e.stopPropagation();
+        toggleSidebar();
+      });
+
+      overlay.addEventListener('click', function() {
+        toggleSidebar(false);
+      });
+
+      window.addEventListener('resize', function() {
+        if (window.innerWidth > 768) {
+          sidebar.classList.remove('open');
+          overlay.classList.remove('show');
+          menuToggle.setAttribute('aria-expanded', 'false');
+        }
+      });
+
+      // ---- User dropdown ----
+      var userMenu = document.getElementById('userMenu');
+      var userDropdown = document.getElementById('userDropdown');
+
+      userMenu.addEventListener('click', function(e) {
+        e.stopPropagation();
+        var expanded = userMenu.getAttribute('aria-expanded') === 'true';
+        userMenu.setAttribute('aria-expanded', !expanded);
+        userDropdown.classList.toggle('show');
+      });
+
+      document.addEventListener('click', function(e) {
+        if (!userMenu.contains(e.target)) {
+          userMenu.setAttribute('aria-expanded', 'false');
+          userDropdown.classList.remove('show');
+        }
+      });
+
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          userMenu.setAttribute('aria-expanded', 'false');
+          userDropdown.classList.remove('show');
+          if (sidebar.classList.contains('open')) toggleSidebar(false);
+        }
+      });
+
+      // ---- Notification ----
+      document.querySelector('.notification-btn').addEventListener('click', function() {
+        alert('Notifications: 3 new messages, 1 payment reminder.');
+      });
+
+      // ---- Logout ----
+      document.getElementById('logoutBtn').addEventListener('click', function(e) {
+        e.preventDefault();
+        if (confirm('Logout dari ETALIO?')) {
+          sessionStorage.removeItem('loggedIn');
+          userDropdown.classList.remove('show');
+          userMenu.setAttribute('aria-expanded', 'false');
+          window.location.href = 'index.html';
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

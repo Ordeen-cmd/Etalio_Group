@@ -1,0 +1,1188 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ETALIO · Users</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
+  <style>
+    /* ---------- RESET & VARIABLES ---------- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --slate-50: #f8fafc;
+      --slate-200: #e2e8f0;
+      --slate-600: #475569;
+      --slate-700: #334155;
+      --slate-800: #1e293b;
+      --slate-900: #0f172a;
+      --white: #ffffff;
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.02);
+      --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.04);
+      --radius: 0.75rem;
+      --success: #22c55e;
+      --danger: #dc2626;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--slate-50);
+      color: var(--slate-900);
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ---------- SIDEBAR ---------- */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 260px;
+      height: 100vh;
+      background: var(--white);
+      border-right: 1px solid var(--slate-200);
+      padding: 1.5rem 1rem;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.25s ease;
+      z-index: 50;
+      overflow-y: auto;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .sidebar-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 2.5rem;
+      padding-left: 0.25rem;
+    }
+
+    .brand-icon {
+      width: 2.4rem;
+      height: 2.4rem;
+      background: var(--primary);
+      border-radius: 0.65rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .brand-word {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .brand-word span {
+      color: var(--primary);
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .sidebar-nav a {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.7rem 0.9rem;
+      border-radius: var(--radius);
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--slate-700);
+      text-decoration: none;
+      transition: background 0.12s, color 0.12s;
+    }
+
+    .sidebar-nav a:hover {
+      background: #f1f5f9;
+      color: var(--slate-900);
+    }
+    .sidebar-nav a.active {
+      background: #eef2ff;
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .sidebar-nav a svg {
+      width: 1.25rem;
+      height: 1.25rem;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      flex-shrink: 0;
+    }
+
+    .sidebar-footer {
+      border-top: 1px solid #eef2f6;
+      padding-top: 1.2rem;
+      font-size: 0.75rem;
+      color: var(--slate-600);
+    }
+
+    /* ---------- MAIN CONTENT ---------- */
+    .main {
+      margin-left: 260px;
+      flex: 1;
+      padding: 1.5rem 2rem 2.5rem;
+      min-height: 100vh;
+      transition: margin 0.2s;
+    }
+
+    /* ---------- TOP NAVBAR ---------- */
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .menu-toggle {
+      background: transparent;
+      border: none;
+      font-size: 1.6rem;
+      padding: 0.2rem 0.4rem;
+      cursor: pointer;
+      color: var(--slate-800);
+      display: none;
+      border-radius: 0.5rem;
+      line-height: 1;
+    }
+    .menu-toggle:hover {
+      background: #f1f5f9;
+    }
+
+    .page-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    .notification-btn {
+      background: transparent;
+      border: none;
+      padding: 0.4rem;
+      cursor: pointer;
+      border-radius: 9999px;
+      transition: background 0.12s;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .notification-btn:hover {
+      background: #f1f5f9;
+    }
+    .notification-dot {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      width: 0.6rem;
+      height: 0.6rem;
+      background: var(--danger);
+      border-radius: 999px;
+      border: 2px solid white;
+    }
+
+    .user-menu {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      cursor: pointer;
+      padding: 0.25rem 0.6rem 0.25rem 0.8rem;
+      border-radius: 2rem;
+      background: white;
+      border: 1px solid var(--slate-200);
+      transition: border 0.1s;
+      user-select: none;
+    }
+    .user-menu:hover {
+      border-color: #94a3b8;
+    }
+
+    .user-avatar {
+      width: 2rem;
+      height: 2rem;
+      background: var(--primary);
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+      font-size: 0.8rem;
+    }
+    .user-name {
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+
+    .user-dropdown {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      background: white;
+      border: 1px solid var(--slate-200);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-md);
+      min-width: 160px;
+      padding: 0.3rem 0;
+      display: none;
+      z-index: 60;
+    }
+    .user-dropdown.show {
+      display: block;
+    }
+    .user-dropdown a {
+      display: block;
+      padding: 0.5rem 1.2rem;
+      font-size: 0.85rem;
+      color: var(--slate-800);
+      text-decoration: none;
+      transition: background 0.08s;
+    }
+    .user-dropdown a:hover {
+      background: #f1f5f9;
+    }
+
+    /* ---------- PAGE HEADER ---------- */
+    .page-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .page-header h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: var(--radius);
+      font-weight: 500;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: background 0.12s, box-shadow 0.12s;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .btn-primary:hover {
+      background: var(--primary-hover);
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+    }
+
+    /* ---------- FILTERS ---------- */
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+      align-items: center;
+    }
+
+    .filters .search-wrapper {
+      position: relative;
+      flex: 1;
+      min-width: 200px;
+    }
+    .filters .search-wrapper input {
+      width: 100%;
+      padding: 0.5rem 0.8rem 0.5rem 2.2rem;
+      border: 1px solid var(--slate-200);
+      border-radius: var(--radius);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.85rem;
+      background: white;
+      color: var(--slate-800);
+      transition: border 0.12s, box-shadow 0.12s;
+      min-width: 0;
+    }
+    .filters .search-wrapper input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+    }
+    .filters .search-wrapper svg {
+      position: absolute;
+      left: 0.7rem;
+      top: 50%;
+      transform: translateY(-50%);
+      stroke: var(--slate-600);
+      width: 1.1rem;
+      height: 1.1rem;
+    }
+
+    /* ---------- TABLE ---------- */
+    .table-container {
+      background: white;
+      border: 1px solid var(--slate-200);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+
+    th {
+      text-align: left;
+      padding: 0.9rem 1rem;
+      font-weight: 600;
+      color: var(--slate-600);
+      border-bottom: 1px solid var(--slate-200);
+      background: #fafbfc;
+      white-space: nowrap;
+    }
+
+    td {
+      padding: 0.9rem 1rem;
+      border-bottom: 1px solid #f1f5f9;
+      vertical-align: middle;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 0.2rem 0.7rem;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      font-weight: 500;
+      text-transform: capitalize;
+    }
+
+    .status-active {
+      background: #dcfce7;
+      color: #166534;
+    }
+    .status-inactive {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .role-badge {
+      display: inline-block;
+      padding: 0.15rem 0.6rem;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      font-weight: 500;
+      background: #eef2ff;
+      color: var(--primary);
+    }
+
+    .action-btn {
+      background: transparent;
+      border: none;
+      padding: 0.2rem 0.5rem;
+      cursor: pointer;
+      color: var(--slate-600);
+      border-radius: 0.3rem;
+      font-size: 0.8rem;
+      transition: background 0.1s, color 0.1s;
+    }
+    .action-btn:hover {
+      background: #f1f5f9;
+      color: var(--slate-900);
+    }
+
+    .action-menu-wrapper {
+      position: relative;
+      display: inline-block;
+    }
+
+    .action-dropdown {
+      position: absolute;
+      right: 0;
+      top: calc(100% + 4px);
+      background: white;
+      border: 1px solid var(--slate-200);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-md);
+      min-width: 140px;
+      padding: 0.2rem 0;
+      display: none;
+      z-index: 40;
+    }
+    .action-dropdown.show {
+      display: block;
+    }
+    .action-dropdown button {
+      display: block;
+      width: 100%;
+      text-align: left;
+      padding: 0.5rem 1rem;
+      background: transparent;
+      border: none;
+      font-size: 0.8rem;
+      font-family: 'Inter', sans-serif;
+      color: var(--slate-800);
+      cursor: pointer;
+      transition: background 0.08s;
+    }
+    .action-dropdown button:hover {
+      background: #f1f5f9;
+    }
+
+    /* ---------- MODAL FORM ---------- */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.4);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    .modal-overlay.show {
+      display: flex;
+    }
+
+    .modal {
+      background: white;
+      border-radius: var(--radius);
+      max-width: 520px;
+      width: 100%;
+      padding: 1.8rem 2rem 2rem;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 1.2rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--slate-200);
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      margin-bottom: 1rem;
+    }
+
+    .form-group label {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--slate-700);
+    }
+
+    .form-group input,
+    .form-group select {
+      padding: 0.5rem 0.8rem;
+      border: 1px solid var(--slate-200);
+      border-radius: var(--radius);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      background: white;
+      color: var(--slate-800);
+      transition: border 0.12s, box-shadow 0.12s;
+      width: 100%;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+    }
+
+    .form-error {
+      color: var(--danger);
+      font-size: 0.75rem;
+      margin-top: 0.2rem;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.8rem;
+      margin-top: 1.5rem;
+      padding-top: 0.8rem;
+      border-top: 1px solid var(--slate-200);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid var(--slate-200);
+      padding: 0.5rem 1.5rem;
+      border-radius: var(--radius);
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.1s;
+      font-family: 'Inter', sans-serif;
+      color: var(--slate-700);
+    }
+
+    .btn-secondary:hover {
+      background: #f1f5f9;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.5rem 1.8rem;
+      border-radius: var(--radius);
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.12s, box-shadow 0.12s;
+      font-family: 'Inter', sans-serif;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-hover);
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 1rem;
+      height: 1rem;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* ---------- RESPONSIVE ---------- */
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+      }
+      .sidebar.open {
+        transform: translateX(0);
+      }
+      .main {
+        margin-left: 0;
+        padding: 1rem 1rem 2rem;
+      }
+      .menu-toggle {
+        display: inline-block;
+      }
+      .page-title {
+        font-size: 1.2rem;
+      }
+      .filters {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .filters .search-wrapper {
+        min-width: 0;
+      }
+      .page-header {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .btn-primary {
+        justify-content: center;
+      }
+      .topbar-right {
+        gap: 0.75rem;
+      }
+      .user-name {
+        display: none;
+      }
+      th,
+      td {
+        padding: 0.6rem 0.5rem;
+      }
+      .modal {
+        padding: 1.2rem;
+        margin: 0.5rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .table-wrap {
+        font-size: 0.75rem;
+      }
+      th,
+      td {
+        padding: 0.4rem 0.3rem;
+      }
+    }
+
+    /* overlay */
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.08);
+      z-index: 40;
+    }
+    .overlay.show {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <!-- overlay mobile -->
+  <div class="overlay" id="overlay"></div>
+
+  <!-- ===== SIDEBAR ===== -->
+  <aside class="sidebar" id="sidebar" role="navigation" aria-label="Sidebar navigation">
+    <div class="sidebar-brand">
+      <div class="brand-icon">E</div>
+      <div class="brand-word">ETAL<span>IO</span></div>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="index.html">
+        <svg viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0a1 1 0 01-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 01-1 1"/></svg>
+        Dashboard
+      </a>
+      <a href="orders.html">
+        <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
+        Orders
+      </a>
+      <a href="products.html">
+        <svg viewBox="0 0 24 24"><path d="M12 2v20M2 12h20"/></svg>
+        Products
+      </a>
+      <a href="customers.html">
+        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        Customers
+      </a>
+      <a href="payments.html">
+        <svg viewBox="0 0 24 24"><path d="M12 2v20M2 12h20"/></svg>
+        Payments
+      </a>
+      <a href="users.html" class="active">
+        <svg viewBox="0 0 24 24"><path d="M12 2v20M2 12h20"/></svg>
+        Users
+      </a>
+    </nav>
+    <div class="sidebar-footer">ETALIO v1.0 · Internal</div>
+  </aside>
+
+  <!-- ===== MAIN ===== -->
+  <main class="main" id="mainContent">
+    <!-- Topbar -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation menu" aria-expanded="false">☰</button>
+        <h1 class="page-title">Users</h1>
+      </div>
+      <div class="topbar-right">
+        <button class="notification-btn" aria-label="Notifications">
+          <svg width="22" height="22" viewBox="0 0 24 24" stroke="#1e293b"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+          <span class="notification-dot"></span>
+        </button>
+        <div class="user-menu" id="userMenu" role="button" tabindex="0" aria-haspopup="true" aria-expanded="false">
+          <div class="user-avatar">A</div>
+          <span class="user-name">Admin</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" stroke="#475569"><polyline points="6 9 12 15 18 9"/></svg>
+          <div class="user-dropdown" id="userDropdown">
+            <a href="users-detail.html">Profil</a>
+            <a href="users-detail.html">Pengaturan</a>
+            <a href="#" onclick="sessionStorage.removeItem('loggedIn');location.href='index.html';return false;">Keluar</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Page Header -->
+    <div class="page-header">
+      <h2>Daftar Pengguna</h2>
+      <button class="btn-primary" id="addUserBtn">
+        <svg width="18" height="18" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Add User
+      </button>
+    </div>
+
+    <!-- Search -->
+    <div class="filters">
+      <div class="search-wrapper">
+        <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="searchInput" placeholder="Search by name, email, or role..." />
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="table-container">
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="userTableBody">
+            <!-- rendered by JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ===== MODAL FORM ===== -->
+    <div class="modal-overlay" id="userModal">
+      <div class="modal" role="dialog" aria-labelledby="modalTitle" aria-modal="true">
+        <h3 id="modalTitle">Add User</h3>
+        <form id="userForm" novalidate>
+          <input type="hidden" id="editUserId" value="" />
+
+          <div class="form-group">
+            <label for="userName">Full Name</label>
+            <input type="text" id="userName" placeholder="e.g. John Doe" required />
+            <div class="form-error" id="nameError"></div>
+          </div>
+
+          <div class="form-group">
+            <label for="userEmail">Email</label>
+            <input type="email" id="userEmail" placeholder="john@example.com" required />
+            <div class="form-error" id="emailError"></div>
+          </div>
+
+          <div class="form-group">
+            <label for="userPassword">Password</label>
+            <input type="password" id="userPassword" placeholder="Minimal 6 characters" />
+            <div class="form-error" id="passwordError"></div>
+          </div>
+
+          <div class="form-group">
+            <label for="userRole">Role</label>
+            <select id="userRole">
+              <option value="admin">Admin</option>
+              <option value="manager">Manager</option>
+              <option value="cs">CS</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="userStatus">Status</label>
+            <select id="userStatus">
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
+            </select>
+          </div>
+
+          <div class="modal-actions">
+            <button type="button" class="btn-secondary" id="modalCancelBtn">Cancel</button>
+            <button type="submit" class="btn-primary" id="modalSaveBtn">
+              <span id="modalSaveText">Save User</span>
+              <span id="modalSaveSpinner" class="spinner" style="display:none;"></span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    (function() {
+      // ---------- MOCK DATA ----------
+      let users = [{
+        id: 1,
+        name: 'Admin Utama',
+        email: 'admin@etalio.com',
+        role: 'admin',
+        status: 'active'
+      }, {
+        id: 2,
+        name: 'Budi Santoso',
+        email: 'budi@etalio.com',
+        role: 'manager',
+        status: 'active'
+      }, {
+        id: 3,
+        name: 'Siti Rahma',
+        email: 'siti@etalio.com',
+        role: 'cs',
+        status: 'active'
+      }, {
+        id: 4,
+        name: 'Andi Wijaya',
+        email: 'andi@etalio.com',
+        role: 'cs',
+        status: 'inactive'
+      }, {
+        id: 5,
+        name: 'Dewi Lestari',
+        email: 'dewi@etalio.com',
+        role: 'manager',
+        status: 'active'
+      }];
+
+      let nextId = 6;
+      let editingId = null;
+
+      // ---------- DOM REFS ----------
+      const tbody = document.getElementById('userTableBody');
+      const searchInput = document.getElementById('searchInput');
+
+      const modal = document.getElementById('userModal');
+      const modalTitle = document.getElementById('modalTitle');
+      const form = document.getElementById('userForm');
+      const editUserId = document.getElementById('editUserId');
+      const userName = document.getElementById('userName');
+      const userEmail = document.getElementById('userEmail');
+      const userPassword = document.getElementById('userPassword');
+      const userRole = document.getElementById('userRole');
+      const userStatus = document.getElementById('userStatus');
+      const modalCancelBtn = document.getElementById('modalCancelBtn');
+      const modalSaveBtn = document.getElementById('modalSaveBtn');
+      const modalSaveText = document.getElementById('modalSaveText');
+      const modalSaveSpinner = document.getElementById('modalSaveSpinner');
+      const nameError = document.getElementById('nameError');
+      const emailError = document.getElementById('emailError');
+      const passwordError = document.getElementById('passwordError');
+
+      const addUserBtn = document.getElementById('addUserBtn');
+
+      // ---------- RENDER ----------
+      function render() {
+        const searchTerm = searchInput.value.toLowerCase().trim();
+
+        const filtered = users.filter(u => {
+          return u.name.toLowerCase().includes(searchTerm) ||
+            u.email.toLowerCase().includes(searchTerm) ||
+            u.role.toLowerCase().includes(searchTerm);
+        });
+
+        if (filtered.length === 0) {
+          tbody.innerHTML =
+            `<tr><td colspan="5" style="text-align:center; padding:2rem; color: var(--slate-600);">No users found.</td></tr>`;
+          return;
+        }
+
+        tbody.innerHTML = filtered.map(user => {
+          const statusClass = 'status-' + user.status;
+          const roleLabel = user.role.charAt(0).toUpperCase() + user.role.slice(1);
+          return `
+              <tr>
+                <td><strong>${user.name}</strong></td>
+                <td>${user.email}</td>
+                <td><span class="role-badge">${roleLabel}</span></td>
+                <td><span class="status-badge ${statusClass}">${user.status}</span></td>
+                <td>
+                  <div class="action-menu-wrapper">
+                    <button class="action-btn" data-user-id="${user.id}" aria-label="Actions">•••</button>
+                    <div class="action-dropdown" data-user-id="${user.id}">
+                      <button data-action="edit">Edit</button>
+                      <button data-action="toggle">${user.status === 'active' ? 'Deactivate' : 'Activate'}</button>
+                      <button data-action="delete">Delete</button>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            `;
+        }).join('');
+
+        // attach action dropdown events
+        document.querySelectorAll('.action-menu-wrapper').forEach(wrapper => {
+          const btn = wrapper.querySelector('.action-btn');
+          const dropdown = wrapper.querySelector('.action-dropdown');
+          btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            document.querySelectorAll('.action-dropdown.show').forEach(d => {
+              if (d !== dropdown) d.classList.remove('show');
+            });
+            dropdown.classList.toggle('show');
+          });
+
+          dropdown.querySelectorAll('button').forEach(item => {
+            item.addEventListener('click', function(e) {
+              e.stopPropagation();
+              const action = this.getAttribute('data-action');
+              const userId = parseInt(dropdown.getAttribute('data-user-id'));
+              const user = users.find(u => u.id === userId);
+              if (!user) return;
+
+              if (action === 'edit') {
+                openEditModal(user);
+              } else if (action === 'toggle') {
+                user.status = user.status === 'active' ? 'inactive' : 'active';
+                render();
+                alert(`User ${user.name} status changed to ${user.status}`);
+              } else if (action === 'delete') {
+                if (confirm(`Delete user ${user.name}?`)) {
+                  users = users.filter(u => u.id !== userId);
+                  render();
+                  alert(`User ${user.name} deleted.`);
+                }
+              }
+              dropdown.classList.remove('show');
+            });
+          });
+        });
+
+        // close dropdowns on outside click
+        document.addEventListener('click', function() {
+          document.querySelectorAll('.action-dropdown.show').forEach(d => d.classList.remove('show'));
+        });
+      }
+
+      // ---------- MODAL HELPERS ----------
+      function openModal(title, userData = null) {
+        modalTitle.textContent = title;
+        form.reset();
+        nameError.textContent = '';
+        emailError.textContent = '';
+        passwordError.textContent = '';
+        userPassword.required = true;
+
+        if (userData) {
+          editingId = userData.id;
+          editUserId.value = userData.id;
+          userName.value = userData.name;
+          userEmail.value = userData.email;
+          userRole.value = userData.role;
+          userStatus.value = userData.status;
+          userPassword.required = false;
+          userPassword.placeholder = 'Leave blank to keep current';
+        } else {
+          editingId = null;
+          editUserId.value = '';
+          userPassword.required = true;
+          userPassword.placeholder = 'Minimal 6 characters';
+          userRole.value = 'cs';
+          userStatus.value = 'active';
+        }
+
+        modal.classList.add('show');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeModal() {
+        modal.classList.remove('show');
+        document.body.style.overflow = '';
+        editingId = null;
+        userPassword.required = true;
+      }
+
+      function openEditModal(user) {
+        openModal('Edit User', user);
+      }
+
+      // ---------- FORM VALIDATION ----------
+      function validateForm() {
+        let isValid = true;
+        nameError.textContent = '';
+        emailError.textContent = '';
+        passwordError.textContent = '';
+
+        const name = userName.value.trim();
+        if (!name) {
+          nameError.textContent = 'Name is required.';
+          isValid = false;
+        }
+
+        const email = userEmail.value.trim();
+        if (!email) {
+          emailError.textContent = 'Email is required.';
+          isValid = false;
+        } else if (!email.includes('@') || !email.includes('.')) {
+          emailError.textContent = 'Enter a valid email address.';
+          isValid = false;
+        }
+
+        const password = userPassword.value;
+        if (userPassword.required && (!password || password.length < 6)) {
+          passwordError.textContent = 'Password must be at least 6 characters.';
+          isValid = false;
+        }
+
+        return isValid;
+      }
+
+      // ---------- SAVE USER ----------
+      function handleSave(e) {
+        e.preventDefault();
+
+        if (!validateForm()) return;
+
+        // show loading
+        modalSaveBtn.disabled = true;
+        modalSaveText.textContent = 'Saving...';
+        modalSaveSpinner.style.display = 'inline-block';
+
+        // mock API call
+        setTimeout(() => {
+          const name = userName.value.trim();
+          const email = userEmail.value.trim();
+          const role = userRole.value;
+          const status = userStatus.value;
+          const password = userPassword.value;
+
+          if (editingId) {
+            // edit existing
+            const user = users.find(u => u.id === editingId);
+            if (user) {
+              user.name = name;
+              user.email = email;
+              user.role = role;
+              user.status = status;
+              if (password && password.length >= 6) {
+                // mock password update (no actual hash)
+                console.log('Password updated for', user.email);
+              }
+            }
+          } else {
+            // create new
+            const newUser = {
+              id: nextId++,
+              name: name,
+              email: email,
+              role: role,
+              status: status
+            };
+            users.push(newUser);
+          }
+
+          render();
+          closeModal();
+
+          // reset loading
+          modalSaveBtn.disabled = false;
+          modalSaveText.textContent = 'Save User';
+          modalSaveSpinner.style.display = 'none';
+
+          alert(editingId ? 'User updated successfully!' : 'User created successfully!');
+        }, 1000);
+      }
+
+      // ---------- EVENT LISTENERS ----------
+      addUserBtn.addEventListener('click', function() {
+        openModal('Add User');
+      });
+
+      modalCancelBtn.addEventListener('click', closeModal);
+
+      modal.addEventListener('click', function(e) {
+        if (e.target === this) closeModal();
+      });
+
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          if (modal.classList.contains('show')) closeModal();
+          if (sidebar.classList.contains('open')) toggleSidebar(false);
+        }
+      });
+
+      form.addEventListener('submit', handleSave);
+      searchInput.addEventListener('input', render);
+
+      // ---------- SIDEBAR TOGGLE ----------
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('overlay');
+      const menuToggle = document.getElementById('menuToggle');
+
+      function toggleSidebar(forceState) {
+        const isOpen = (forceState !== undefined) ? forceState : !sidebar.classList.contains('open');
+        sidebar.classList.toggle('open', isOpen);
+        overlay.classList.toggle('show', isOpen);
+        menuToggle.setAttribute('aria-expanded', isOpen);
+      }
+
+      menuToggle.addEventListener('click', function(e) {
+        e.stopPropagation();
+        toggleSidebar();
+      });
+
+      overlay.addEventListener('click', function() {
+        toggleSidebar(false);
+      });
+
+      window.addEventListener('resize', function() {
+        if (window.innerWidth > 768) {
+          sidebar.classList.remove('open');
+          overlay.classList.remove('show');
+          menuToggle.setAttribute('aria-expanded', 'false');
+        }
+      });
+
+      // ---------- USER DROPDOWN ----------
+      const userMenu = document.getElementById('userMenu');
+      const userDropdown = document.getElementById('userDropdown');
+
+      userMenu.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const expanded = userMenu.getAttribute('aria-expanded') === 'true';
+        userMenu.setAttribute('aria-expanded', !expanded);
+        userDropdown.classList.toggle('show');
+      });
+
+      document.addEventListener('click', function(e) {
+        if (!userMenu.contains(e.target)) {
+          userMenu.setAttribute('aria-expanded', 'false');
+          userDropdown.classList.remove('show');
+        }
+      });
+
+      // ---------- INIT ----------
+      render();
+    })();
+  </script>
+  <script>if(sessionStorage.getItem('loggedIn')!=='true')location.href='index.html';</script>
+</body>
+</html>

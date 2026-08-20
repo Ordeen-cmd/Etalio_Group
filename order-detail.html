@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ETALIO · Order Detail</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
+  <style>
+    /* ---------- RESET & VARIABLES ---------- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --slate-50: #f8fafc;
+      --slate-200: #e2e8f0;
+      --slate-600: #475569;
+      --slate-700: #334155;
+      --slate-800: #1e293b;
+      --slate-900: #0f172a;
+      --white: #ffffff;
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.02);
+      --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.04);
+      --radius: 0.75rem;
+      --danger: #dc2626;
+      --danger-hover: #b91c1c;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--slate-50);
+      color: var(--slate-900);
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ---------- SIDEBAR ---------- */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 260px;
+      height: 100vh;
+      background: var(--white);
+      border-right: 1px solid var(--slate-200);
+      padding: 1.5rem 1rem;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.25s ease;
+      z-index: 50;
+      overflow-y: auto;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .sidebar-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 2.5rem;
+      padding-left: 0.25rem;
+    }
+
+    .brand-icon {
+      width: 2.4rem;
+      height: 2.4rem;
+      background: var(--primary);
+      border-radius: 0.65rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .brand-word {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .brand-word span {
+      color: var(--primary);
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .sidebar-nav a {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.7rem 0.9rem;
+      border-radius: var(--radius);
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--slate-700);
+      text-decoration: none;
+      transition: background 0.12s, color 0.12s;
+    }
+
+    .sidebar-nav a:hover {
+      background: #f1f5f9;
+      color: var(--slate-900);
+    }
+    .sidebar-nav a.active {
+      background: #eef2ff;
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .sidebar-nav a svg {
+      width: 1.25rem;
+      height: 1.25rem;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      flex-shrink: 0;
+    }
+
+    .sidebar-footer {
+      border-top: 1px solid #eef2f6;
+      padding-top: 1.2rem;
+      font-size: 0.75rem;
+      color: var(--slate-600);
+    }
+
+    /* ---------- MAIN CONTENT ---------- */
+    .main {
+      margin-left: 260px;
+      flex: 1;
+      padding: 1.5rem 2rem 2.5rem;
+      min-height: 100vh;
+      transition: margin 0.2s;
+    }
+
+    /* ---------- TOP NAVBAR ---------- */
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .menu-toggle {
+      background: transparent;
+      border: none;
+      font-size: 1.6rem;
+      padding: 0.2rem 0.4rem;
+      cursor: pointer;
+      color: var(--slate-800);
+      display: none;
+      border-radius: 0.5rem;
+      line-height: 1;
+    }
+    .menu-toggle:hover {
+      background: #f1f5f9;
+    }
+
+    .page-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    .notification-btn {
+      background: transparent;
+      border: none;
+      padding: 0.4rem;
+      cursor: pointer;
+      border-radius: 9999px;
+      transition: background 0.12s;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .notification-btn:hover {
+      background: #f1f5f9;
+    }
+    .notification-dot {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      width: 0.6rem;
+      height: 0.6rem;
+      background: #dc2626;
+      border-radius: 999px;
+      border: 2px solid white;
+    }
+
+    .user-menu {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      cursor: pointer;
+      padding: 0.25rem 0.6rem 0.25rem 0.8rem;
+      border-radius: 2rem;
+      background: white;
+      border: 1px solid var(--slate-200);
+      transition: border 0.1s;
+      user-select: none;
+    }
+    .user-menu:hover {
+      border-color: #94a3b8;
+    }
+
+    .user-avatar {
+      width: 2rem;
+      height: 2rem;
+      background: var(--primary);
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+      font-size: 0.8rem;
+    }
+    .user-name {
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+
+    .user-dropdown {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      background: white;
+      border: 1px solid var(--slate-200);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-md);
+      min-width: 160px;
+      padding: 0.3rem 0;
+      display: none;
+      z-index: 60;
+    }
+    .user-dropdown.show {
+      display: block;
+    }
+    .user-dropdown a {
+      display: block;
+      padding: 0.5rem 1.2rem;
+      font-size: 0.85rem;
+      color: var(--slate-800);
+      text-decoration: none;
+      transition: background 0.08s;
+    }
+    .user-dropdown a:hover {
+      background: #f1f5f9;
+    }
+
+    /* ---------- ORDER HEADER ---------- */
+    .order-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      gap: 0.8rem;
+    }
+
+    .order-header-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .order-number {
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 0.25rem 0.9rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: capitalize;
+      letter-spacing: 0.02em;
+    }
+
+    .status-pending_payment {
+      background: #fef9c3;
+      color: #854d0e;
+    }
+    .status-confirmed {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+    .status-processing {
+      background: #e0f2fe;
+      color: #0369a1;
+    }
+    .status-shipped {
+      background: #c7d2fe;
+      color: #3730a3;
+    }
+    .status-delivered {
+      background: #dcfce7;
+      color: #166534;
+    }
+    .status-completed {
+      background: #d1fae5;
+      color: #065f46;
+    }
+    .status-cancelled {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .order-header-actions {
+      display: flex;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid var(--slate-200);
+      padding: 0.5rem 1.2rem;
+      border-radius: var(--radius);
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.1s;
+      font-family: 'Inter', sans-serif;
+      color: var(--slate-700);
+      font-size: 0.85rem;
+    }
+
+    .btn-secondary:hover {
+      background: #f1f5f9;
+    }
+
+    .btn-danger {
+      background: var(--danger);
+      color: white;
+      border: none;
+      padding: 0.5rem 1.2rem;
+      border-radius: var(--radius);
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.12s;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.85rem;
+    }
+
+    .btn-danger:hover {
+      background: var(--danger-hover);
+    }
+
+    /* ---------- GRID LAYOUT ---------- */
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr;
+      gap: 1.5rem;
+    }
+
+    .card {
+      background: white;
+      border: 1px solid var(--slate-200);
+      border-radius: var(--radius);
+      padding: 1.2rem 1.2rem 1.5rem;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 1.5rem;
+    }
+
+    .card-title {
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-bottom: 0.8rem;
+      color: var(--slate-800);
+    }
+
+    .card-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.3rem 0;
+      font-size: 0.85rem;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .card-row:last-child {
+      border-bottom: none;
+    }
+
+    .card-row .label {
+      color: var(--slate-600);
+    }
+
+    .card-row .value {
+      font-weight: 500;
+      color: var(--slate-900);
+    }
+
+    /* ---------- ORDER ITEMS TABLE ---------- */
+    .items-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      margin-top: 0.3rem;
+    }
+
+    .items-table th {
+      text-align: left;
+      padding: 0.4rem 0.3rem 0.5rem 0;
+      font-weight: 600;
+      color: var(--slate-600);
+      border-bottom: 1px solid var(--slate-200);
+    }
+
+    .items-table td {
+      padding: 0.4rem 0.3rem 0.4rem 0;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .items-table .text-right {
+      text-align: right;
+    }
+
+    /* ---------- TIMELINE ---------- */
+    .timeline {
+      position: relative;
+      padding-left: 1.5rem;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 0.25rem;
+      top: 0.4rem;
+      bottom: 0.4rem;
+      width: 2px;
+      background: var(--slate-200);
+    }
+
+    .timeline-item {
+      position: relative;
+      padding-bottom: 1.2rem;
+      padding-left: 0.8rem;
+    }
+
+    .timeline-item:last-child {
+      padding-bottom: 0;
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -1.25rem;
+      top: 0.3rem;
+      width: 0.75rem;
+      height: 0.75rem;
+      border-radius: 999px;
+      background: var(--slate-200);
+      border: 2px solid white;
+      box-shadow: 0 0 0 1px var(--slate-200);
+    }
+
+    .timeline-item.active::before {
+      background: var(--primary);
+      box-shadow: 0 0 0 1px var(--primary);
+    }
+
+    .timeline-item.completed::before {
+      background: #22c55e;
+      box-shadow: 0 0 0 1px #22c55e;
+    }
+
+    .timeline-item .time {
+      font-size: 0.7rem;
+      color: var(--slate-600);
+      display: block;
+      margin-bottom: 0.1rem;
+    }
+
+    .timeline-item .event {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--slate-800);
+    }
+
+    .timeline-item .desc {
+      font-size: 0.8rem;
+      color: var(--slate-600);
+    }
+
+    /* ---------- MODAL ---------- */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.4);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    .modal-overlay.show {
+      display: flex;
+    }
+
+    .modal {
+      background: white;
+      border-radius: var(--radius);
+      max-width: 440px;
+      width: 100%;
+      padding: 1.8rem 2rem 2rem;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
+    }
+
+    .modal h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .modal p {
+      font-size: 0.9rem;
+      color: var(--slate-600);
+      margin-bottom: 1.5rem;
+      line-height: 1.5;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 0.8rem;
+      justify-content: flex-end;
+    }
+
+    .modal-actions .btn-secondary {
+      padding: 0.5rem 1.5rem;
+    }
+
+    .modal-actions .btn-danger {
+      padding: 0.5rem 1.5rem;
+    }
+
+    /* ---------- RESPONSIVE ---------- */
+    @media (max-width: 1024px) {
+      .detail-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+      }
+      .sidebar.open {
+        transform: translateX(0);
+      }
+      .main {
+        margin-left: 0;
+        padding: 1rem 1rem 2rem;
+      }
+      .menu-toggle {
+        display: inline-block;
+      }
+      .page-title {
+        font-size: 1.2rem;
+      }
+      .order-header {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .order-header-actions {
+        flex-direction: column;
+      }
+      .order-header-actions button {
+        width: 100%;
+        justify-content: center;
+      }
+      .topbar-right {
+        gap: 0.75rem;
+      }
+      .user-name {
+        display: none;
+      }
+      .modal {
+        margin: 1rem;
+        padding: 1.5rem;
+      }
+    }
+
+    /* overlay */
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.08);
+      z-index: 40;
+    }
+    .overlay.show {
+      display: block;
+    }
+
+    .text-muted {
+      color: var(--slate-600);
+      font-size: 0.8rem;
+    }
+
+    .mt-2 {
+      margin-top: 0.75rem;
+    }
+
+    .gap-2 {
+      gap: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <!-- overlay mobile -->
+  <div class="overlay" id="overlay"></div>
+
+  <!-- ===== SIDEBAR ===== -->
+  <aside class="sidebar" id="sidebar" role="navigation" aria-label="Sidebar navigation">
+    <div class="sidebar-brand">
+      <div class="brand-icon">E</div>
+      <div class="brand-word">ETAL<span>IO</span></div>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="index.html">
+        <svg viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0a1 1 0 01-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 01-1 1"/></svg>
+        Dashboard
+      </a>
+      <a href="orders.html" class="active">
+        <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
+        Orders
+      </a>
+      <a href="products.html">
+        <svg viewBox="0 0 24 24"><path d="M12 2v20M2 12h20"/></svg>
+        Products
+      </a>
+      <a href="customers.html">
+        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        Customers
+      </a>
+      <a href="payments.html">
+        <svg viewBox="0 0 24 24"><path d="M12 2v20M2 12h20"/></svg>
+        Payments
+      </a>
+      <a href="users.html">
+        <svg viewBox="0 0 24 24"><path d="M12 2v20M2 12h20"/></svg>
+        Users
+      </a>
+    </nav>
+    <div class="sidebar-footer">ETALIO v1.0 · Internal</div>
+  </aside>
+
+  <!-- ===== MAIN ===== -->
+  <main class="main" id="mainContent">
+    <!-- Topbar -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation menu" aria-expanded="false">☰</button>
+        <h1 class="page-title">Order Detail</h1>
+      </div>
+      <div class="topbar-right">
+        <button class="notification-btn" aria-label="Notifications">
+          <svg width="22" height="22" viewBox="0 0 24 24" stroke="#1e293b"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+          <span class="notification-dot"></span>
+        </button>
+        <div class="user-menu" id="userMenu" role="button" tabindex="0" aria-haspopup="true" aria-expanded="false">
+          <div class="user-avatar">A</div>
+          <span class="user-name">Admin</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" stroke="#475569"><polyline points="6 9 12 15 18 9"/></svg>
+          <div class="user-dropdown" id="userDropdown">
+            <a href="users-detail.html">Profil</a>
+            <a href="users-detail.html">Pengaturan</a>
+            <a href="#" onclick="sessionStorage.removeItem('loggedIn');location.href='index.html';return false;">Keluar</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Order Header -->
+    <div class="order-header">
+      <div class="order-header-left">
+        <span class="order-number" id="orderNumber">#ET-1024</span>
+        <span class="status-badge status-processing" id="orderStatusBadge">Processing</span>
+      </div>
+      <div class="order-header-actions">
+        <button class="btn-secondary" id="editBtn">Edit Order</button>
+        <button class="btn-danger" id="cancelBtn">Cancel Order</button>
+      </div>
+    </div>
+
+    <!-- Detail Grid -->
+    <div class="detail-grid">
+      <!-- Left Column -->
+      <div>
+        <!-- Customer Card -->
+        <div class="card">
+          <div class="card-title">Customer</div>
+          <div class="card-row"><span class="label">Name</span><span class="value" id="customerName">Andi Wijaya</span></div>
+          <div class="card-row"><span class="label">WhatsApp</span><span class="value" id="customerWhatsapp">+62 812-3456-7890</span></div>
+          <div class="card-row"><span class="label">Email</span><span class="value" id="customerEmail">andi@example.com</span></div>
+        </div>
+
+        <!-- Order Items -->
+        <div class="card">
+          <div class="card-title">Order Items</div>
+          <table class="items-table" id="itemsTable">
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Variant</th>
+                <th style="text-align:center;">Qty</th>
+                <th style="text-align:right;">Price</th>
+                <th style="text-align:right;">Total</th>
+              </tr>
+            </thead>
+            <tbody id="itemsBody">
+              <!-- rendered by JS -->
+            </tbody>
+          </table>
+          <div style="margin-top:0.8rem; border-top:1px solid var(--slate-200); padding-top:0.8rem;">
+            <div class="card-row"><span class="label">Subtotal</span><span class="value" id="subtotalDisplay">Rp 0</span></div>
+            <div class="card-row"><span class="label">Discount</span><span class="value" id="discountDisplay">Rp 0</span></div>
+            <div class="card-row" style="font-weight:700; font-size:1rem;"><span class="label">Total</span><span class="value" id="totalDisplay">Rp 0</span></div>
+          </div>
+        </div>
+
+        <!-- Address -->
+        <div class="card">
+          <div class="card-title">Delivery Address</div>
+          <div id="addressDisplay" style="font-size:0.85rem; color:var(--slate-700);">Jl. Sudirman No. 10, Jakarta</div>
+        </div>
+      </div>
+
+      <!-- Right Column -->
+      <div>
+        <!-- Payment -->
+        <div class="card">
+          <div class="card-title">Payment</div>
+          <div class="card-row"><span class="label">Status</span><span class="value" id="paymentStatus">Paid</span></div>
+          <div class="card-row"><span class="label">Payment Number</span><span class="value" id="paymentNumber">INV-2025-001</span></div>
+          <div class="card-row"><span class="label">Amount</span><span class="value" id="paymentAmount">Rp 4.280.000</span></div>
+        </div>
+
+        <!-- Fulfillment -->
+        <div class="card">
+          <div class="card-title">Fulfillment</div>
+          <div class="card-row"><span class="label">Status</span><span class="value" id="fulfillmentStatus">Processing</span></div>
+          <div class="card-row"><span class="label">Last Update</span><span class="value" id="fulfillmentDate">2025-02-10 14:30</span></div>
+        </div>
+
+        <!-- Timeline -->
+        <div class="card">
+          <div class="card-title">Order Timeline</div>
+          <div class="timeline" id="timelineContainer">
+            <!-- rendered by JS -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== CANCEL MODAL ===== -->
+    <div class="modal-overlay" id="cancelModal">
+      <div class="modal" role="dialog" aria-labelledby="modalTitle" aria-modal="true">
+        <h3 id="modalTitle">Cancel Order</h3>
+        <p>Are you sure you want to cancel this order? This action cannot be undone and may affect inventory and payment status.</p>
+        <div class="modal-actions">
+          <button class="btn-secondary" id="modalCancelBtn">Close</button>
+          <button class="btn-danger" id="modalConfirmBtn">Yes, Cancel Order</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    (function() {
+      // ---------- MOCK DATA ----------
+      const orderData = {
+        id: 1024,
+        orderNumber: '#ET-1024',
+        status: 'processing', // pending_payment, confirmed, processing, shipped, delivered, completed, cancelled
+        customer: {
+          name: 'Andi Wijaya',
+          whatsapp: '+62 812-3456-7890',
+          email: 'andi@example.com'
+        },
+        items: [
+          { product: 'Kopi Arabika', variant: '500g', quantity: 2, price: 120000, total: 240000 },
+          { product: 'Gula Aren', variant: '1kg', quantity: 3, price: 45000, total: 135000 },
+          { product: 'Botol 500ml', variant: 'Transparan', quantity: 10, price: 8500, total: 85000 },
+          { product: 'Kardus Sedang', variant: 'Pak 10', quantity: 2, price: 12000, total: 24000 }
+        ],
+        subtotal: 484000,
+        discount: 20000,
+        total: 464000,
+        payment: {
+          status: 'Paid',
+          number: 'INV-2025-001',
+          amount: 464000
+        },
+        fulfillment: {
+          status: 'Processing',
+          lastUpdate: '2025-02-10 14:30'
+        },
+        address: 'Jl. Sudirman No. 10, Jakarta',
+        timeline: [
+          { event: 'Order Created', description: 'Order created by customer', time: '2025-02-08 09:15', done: true },
+          { event: 'Payment Paid', description: 'Payment confirmed via Bank Transfer', time: '2025-02-08 10:30',
+          done: true },
+          { event: 'Order Confirmed', description: 'Order confirmed by admin', time: '2025-02-08 11:45', done: true },
+          { event: 'Processing', description: 'Order is being prepared', time: '2025-02-09 08:00', done: true },
+          { event: 'Shipped', description: 'Order shipped by courier', time: '2025-02-10 14:30', done: false },
+          { event: 'Delivered', description: 'Order delivered to customer', time: '', done: false },
+          { event: 'Completed', description: 'Order completed', time: '', done: false }
+        ]
+      };
+
+      // ---------- DOM REFS ----------
+      const orderNumber = document.getElementById('orderNumber');
+      const orderStatusBadge = document.getElementById('orderStatusBadge');
+      const customerName = document.getElementById('customerName');
+      const customerWhatsapp = document.getElementById('customerWhatsapp');
+      const customerEmail = document.getElementById('customerEmail');
+      const itemsBody = document.getElementById('itemsBody');
+      const subtotalDisplay = document.getElementById('subtotalDisplay');
+      const discountDisplay = document.getElementById('discountDisplay');
+      const totalDisplay = document.getElementById('totalDisplay');
+      const addressDisplay = document.getElementById('addressDisplay');
+      const paymentStatus = document.getElementById('paymentStatus');
+      const paymentNumber = document.getElementById('paymentNumber');
+      const paymentAmount = document.getElementById('paymentAmount');
+      const fulfillmentStatus = document.getElementById('fulfillmentStatus');
+      const fulfillmentDate = document.getElementById('fulfillmentDate');
+      const timelineContainer = document.getElementById('timelineContainer');
+
+      // ---------- FORMAT ----------
+      function formatCurrency(amount) {
+        return 'Rp ' + Math.round(amount).toLocaleString('id-ID');
+      }
+
+      // ---------- RENDER ----------
+      function render() {
+        // header
+        orderNumber.textContent = orderData.orderNumber;
+        const status = orderData.status;
+        orderStatusBadge.textContent = status.replace('_', ' ').toUpperCase();
+        orderStatusBadge.className = 'status-badge status-' + status;
+
+        // customer
+        customerName.textContent = orderData.customer.name;
+        customerWhatsapp.textContent = orderData.customer.whatsapp;
+        customerEmail.textContent = orderData.customer.email;
+
+        // items
+        if (orderData.items.length === 0) {
+          itemsBody.innerHTML =
+            `<tr><td colspan="5" style="text-align:center; padding:1rem; color: var(--slate-600);">No items</td></tr>`;
+        } else {
+          itemsBody.innerHTML = orderData.items.map(item => `
+              <tr>
+                <td>${item.product}</td>
+                <td>${item.variant}</td>
+                <td style="text-align:center;">${item.quantity}</td>
+                <td style="text-align:right;">${formatCurrency(item.price)}</td>
+                <td style="text-align:right;">${formatCurrency(item.total)}</td>
+              </tr>
+            `).join('');
+        }
+
+        // summary
+        subtotalDisplay.textContent = formatCurrency(orderData.subtotal);
+        discountDisplay.textContent = formatCurrency(orderData.discount);
+        totalDisplay.textContent = formatCurrency(orderData.total);
+
+        // address
+        addressDisplay.textContent = orderData.address;
+
+        // payment
+        paymentStatus.textContent = orderData.payment.status;
+        paymentNumber.textContent = orderData.payment.number;
+        paymentAmount.textContent = formatCurrency(orderData.payment.amount);
+
+        // fulfillment
+        fulfillmentStatus.textContent = orderData.fulfillment.status;
+        fulfillmentDate.textContent = orderData.fulfillment.lastUpdate;
+
+        // timeline
+        const currentStatus = orderData.status;
+        const statusMap = {
+          'pending_payment': 0,
+          'confirmed': 1,
+          'processing': 2,
+          'shipped': 3,
+          'delivered': 4,
+          'completed': 5
+        };
+        const currentIndex = statusMap[currentStatus] !== undefined ? statusMap[currentStatus] : 0;
+
+        timelineContainer.innerHTML = orderData.timeline.map((item, index) => {
+          let cls = 'timeline-item';
+          if (item.done) cls += ' completed';
+          else if (index === currentIndex && !item.done) cls += ' active';
+          return `
+            <div class="${cls}">
+              <span class="time">${item.time || '—'}</span>
+              <div class="event">${item.event}</div>
+              <div class="desc">${item.description}</div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      // ---------- CANCEL MODAL ----------
+      const cancelModal = document.getElementById('cancelModal');
+      const modalCancelBtn = document.getElementById('modalCancelBtn');
+      const modalConfirmBtn = document.getElementById('modalConfirmBtn');
+      const cancelBtn = document.getElementById('cancelBtn');
+
+      function openModal() {
+        cancelModal.classList.add('show');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeModal() {
+        cancelModal.classList.remove('show');
+        document.body.style.overflow = '';
+      }
+
+      cancelBtn.addEventListener('click', openModal);
+      modalCancelBtn.addEventListener('click', closeModal);
+
+      // close on overlay click
+      cancelModal.addEventListener('click', function(e) {
+        if (e.target === this) closeModal();
+      });
+
+      // confirm cancel
+      modalConfirmBtn.addEventListener('click', function() {
+        if (orderData.status === 'cancelled') {
+          alert('Order already cancelled.');
+          closeModal();
+          return;
+        }
+        // update status
+        orderData.status = 'cancelled';
+        // update timeline: mark all as done except add cancelled event
+        orderData.timeline.forEach(item => item.done = true);
+        orderData.timeline.push({
+          event: 'Order Cancelled',
+          description: 'Order was cancelled by admin',
+          time: new Date().toISOString().slice(0, 16).replace('T', ' '),
+          done: true
+        });
+        // update fulfillment
+        orderData.fulfillment.status = 'Cancelled';
+        orderData.fulfillment.lastUpdate = new Date().toISOString().slice(0, 16).replace('T', ' ');
+
+        render();
+        closeModal();
+        alert('Order has been cancelled successfully.');
+      });
+
+      // ---------- EDIT BUTTON ----------
+      document.getElementById('editBtn').addEventListener('click', function() {
+        alert('Edit order (redirect to edit page)');
+      });
+
+      // ---------- SIDEBAR TOGGLE ----------
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('overlay');
+      const menuToggle = document.getElementById('menuToggle');
+
+      function toggleSidebar(forceState) {
+        const isOpen = (forceState !== undefined) ? forceState : !sidebar.classList.contains('open');
+        sidebar.classList.toggle('open', isOpen);
+        overlay.classList.toggle('show', isOpen);
+        menuToggle.setAttribute('aria-expanded', isOpen);
+      }
+
+      menuToggle.addEventListener('click', function(e) {
+        e.stopPropagation();
+        toggleSidebar();
+      });
+
+      overlay.addEventListener('click', function() {
+        toggleSidebar(false);
+      });
+
+      window.addEventListener('resize', function() {
+        if (window.innerWidth > 768) {
+          sidebar.classList.remove('open');
+          overlay.classList.remove('show');
+          menuToggle.setAttribute('aria-expanded', 'false');
+        }
+      });
+
+      // ---------- USER DROPDOWN ----------
+      const userMenu = document.getElementById('userMenu');
+      const userDropdown = document.getElementById('userDropdown');
+
+      userMenu.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const expanded = userMenu.getAttribute('aria-expanded') === 'true';
+        userMenu.setAttribute('aria-expanded', !expanded);
+        userDropdown.classList.toggle('show');
+      });
+
+      document.addEventListener('click', function(e) {
+        if (!userMenu.contains(e.target)) {
+          userMenu.setAttribute('aria-expanded', 'false');
+          userDropdown.classList.remove('show');
+        }
+      });
+
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          userMenu.setAttribute('aria-expanded', 'false');
+          userDropdown.classList.remove('show');
+          if (sidebar.classList.contains('open')) toggleSidebar(false);
+          if (cancelModal.classList.contains('show')) closeModal();
+        }
+      });
+
+      // ---------- INIT ----------
+      render();
+    })();
+  </script>
+  <script>if(sessionStorage.getItem('loggedIn')!=='true')location.href='index.html';</script>
+</body>
+</html>

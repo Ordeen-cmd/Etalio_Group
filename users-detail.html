@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ETALIO · Profile Settings</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
+  <style>
+    /* ---------- RESET & VARIABLES ---------- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --slate-50: #f8fafc;
+      --slate-200: #e2e8f0;
+      --slate-600: #475569;
+      --slate-700: #334155;
+      --slate-800: #1e293b;
+      --slate-900: #0f172a;
+      --white: #ffffff;
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.02);
+      --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.04);
+      --radius: 0.75rem;
+      --success: #22c55e;
+      --danger: #dc2626;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--slate-50);
+      color: var(--slate-900);
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ---------- SIDEBAR ---------- */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 260px;
+      height: 100vh;
+      background: var(--white);
+      border-right: 1px solid var(--slate-200);
+      padding: 1.5rem 1rem;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.25s ease;
+      z-index: 50;
+      overflow-y: auto;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .sidebar-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 2.5rem;
+      padding-left: 0.25rem;
+    }
+
+    .brand-icon {
+      width: 2.4rem;
+      height: 2.4rem;
+      background: var(--primary);
+      border-radius: 0.65rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .brand-word {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .brand-word span {
+      color: var(--primary);
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .sidebar-nav a {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.7rem 0.9rem;
+      border-radius: var(--radius);
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--slate-700);
+      text-decoration: none;
+      transition: background 0.12s, color 0.12s;
+    }
+
+    .sidebar-nav a:hover {
+      background: #f1f5f9;
+      color: var(--slate-900);
+    }
+    .sidebar-nav a.active {
+      background: #eef2ff;
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .sidebar-nav a svg {
+      width: 1.25rem;
+      height: 1.25rem;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      flex-shrink: 0;
+    }
+
+    .sidebar-footer {
+      border-top: 1px solid #eef2f6;
+      padding-top: 1.2rem;
+      font-size: 0.75rem;
+      color: var(--slate-600);
+    }
+
+    /* ---------- MAIN CONTENT ---------- */
+    .main {
+      margin-left: 260px;
+      flex: 1;
+      padding: 1.5rem 2rem 2.5rem;
+      min-height: 100vh;
+      transition: margin 0.2s;
+    }
+
+    /* ---------- TOP NAVBAR ---------- */
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .menu-toggle {
+      background: transparent;
+      border: none;
+      font-size: 1.6rem;
+      padding: 0.2rem 0.4rem;
+      cursor: pointer;
+      color: var(--slate-800);
+      display: none;
+      border-radius: 0.5rem;
+      line-height: 1;
+    }
+    .menu-toggle:hover {
+      background: #f1f5f9;
+    }
+
+    .page-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    .notification-btn {
+      background: transparent;
+      border: none;
+      padding: 0.4rem;
+      cursor: pointer;
+      border-radius: 9999px;
+      transition: background 0.12s;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .notification-btn:hover {
+      background: #f1f5f9;
+    }
+    .notification-dot {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      width: 0.6rem;
+      height: 0.6rem;
+      background: var(--danger);
+      border-radius: 999px;
+      border: 2px solid white;
+    }
+
+    .user-menu {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      cursor: pointer;
+      padding: 0.25rem 0.6rem 0.25rem 0.8rem;
+      border-radius: 2rem;
+      background: white;
+      border: 1px solid var(--slate-200);
+      transition: border 0.1s;
+      user-select: none;
+    }
+    .user-menu:hover {
+      border-color: #94a3b8;
+    }
+
+    .user-avatar {
+      width: 2rem;
+      height: 2rem;
+      background: var(--primary);
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+      font-size: 0.8rem;
+    }
+    .user-name {
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+
+    .user-dropdown {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      background: white;
+      border: 1px solid var(--slate-200);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-md);
+      min-width: 160px;
+      padding: 0.3rem 0;
+      display: none;
+      z-index: 60;
+    }
+    .user-dropdown.show {
+      display: block;
+    }
+    .user-dropdown a {
+      display: block;
+      padding: 0.5rem 1.2rem;
+      font-size: 0.85rem;
+      color: var(--slate-800);
+      text-decoration: none;
+      transition: background 0.08s;
+    }
+    .user-dropdown a:hover {
+      background: #f1f5f9;
+    }
+
+    /* ---------- PROFILE SETTINGS ---------- */
+    .settings-container {
+      max-width: 720px;
+    }
+
+    .settings-card {
+      background: white;
+      border: 1px solid var(--slate-200);
+      border-radius: var(--radius);
+      padding: 1.8rem 2rem 2rem;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 1.5rem;
+    }
+
+    .card-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--slate-800);
+      margin-bottom: 1.2rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--slate-200);
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .form-group label {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--slate-700);
+    }
+
+    .form-group input {
+      padding: 0.6rem 0.8rem;
+      border: 1px solid var(--slate-200);
+      border-radius: var(--radius);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      background: white;
+      color: var(--slate-800);
+      transition: border 0.12s, box-shadow 0.12s;
+      width: 100%;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+    }
+
+    .form-group input.error {
+      border-color: var(--danger);
+      box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+    }
+
+    .form-error {
+      color: var(--danger);
+      font-size: 0.75rem;
+      margin-top: 0.15rem;
+    }
+
+    .password-wrapper {
+      position: relative;
+    }
+
+    .password-wrapper input {
+      padding-right: 2.8rem;
+    }
+
+    .toggle-password {
+      position: absolute;
+      right: 0.6rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      color: var(--slate-600);
+      padding: 0.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 0.3rem;
+      transition: background 0.1s;
+    }
+
+    .toggle-password:hover {
+      background: #f1f5f9;
+    }
+
+    .toggle-password svg {
+      width: 1.2rem;
+      height: 1.2rem;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.6rem 1.8rem;
+      border-radius: var(--radius);
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.12s, box-shadow 0.12s;
+      font-family: 'Inter', sans-serif;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-hover);
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 1rem;
+      height: 1rem;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 0.5rem;
+    }
+
+    /* ---------- SUCCESS FEEDBACK ---------- */
+    .feedback {
+      display: none;
+      padding: 0.8rem 1rem;
+      border-radius: var(--radius);
+      font-size: 0.9rem;
+      margin-bottom: 1.2rem;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .feedback.show {
+      display: flex;
+    }
+
+    .feedback.success {
+      background: #dcfce7;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+    }
+
+    .feedback svg {
+      width: 1.2rem;
+      height: 1.2rem;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      flex-shrink: 0;
+    }
+
+    /* ---------- RESPONSIVE ---------- */
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+      }
+      .sidebar.open {
+        transform: translateX(0);
+      }
+      .main {
+        margin-left: 0;
+        padding: 1rem 1rem 2rem;
+      }
+      .menu-toggle {
+        display: inline-block;
+      }
+      .page-title {
+        font-size: 1.2rem;
+      }
+      .settings-card {
+        padding: 1.2rem;
+      }
+      .topbar-right {
+        gap: 0.75rem;
+      }
+      .user-name {
+        display: none;
+      }
+      .form-actions {
+        justify-content: stretch;
+      }
+      .form-actions .btn-primary {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+
+    /* overlay */
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.08);
+      z-index: 40;
+    }
+    .overlay.show {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <!-- overlay mobile -->
+  <div class="overlay" id="overlay"></div>
+
+  <!-- ===== SIDEBAR ===== -->
+  <aside class="sidebar" id="sidebar" role="navigation" aria-label="Sidebar navigation">
+    <div class="sidebar-brand">
+      <div class="brand-icon">E</div>
+      <div class="brand-word">ETAL<span>IO</span></div>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="index.html">
+        <svg viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0a1 1 0 01-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 01-1 1"/></svg>
+        Dashboard
+      </a>
+      <a href="orders.html">
+        <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
+        Orders
+      </a>
+      <a href="products.html">
+        <svg viewBox="0 0 24 24"><path d="M12 2v20M2 12h20"/></svg>
+        Products
+      </a>
+      <a href="customers.html">
+        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        Customers
+      </a>
+      <a href="payments.html">
+        <svg viewBox="0 0 24 24"><path d="M12 2v20M2 12h20"/></svg>
+        Payments
+      </a>
+      <a href="users.html" class="active">
+        <svg viewBox="0 0 24 24"><path d="M12 2v20M2 12h20"/></svg>
+        Users
+      </a>
+    </nav>
+    <div class="sidebar-footer">ETALIO v1.0 · Internal</div>
+  </aside>
+
+  <!-- ===== MAIN ===== -->
+  <main class="main" id="mainContent">
+    <!-- Topbar -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation menu" aria-expanded="false">☰</button>
+        <h1 class="page-title">Profile Settings</h1>
+      </div>
+      <div class="topbar-right">
+        <button class="notification-btn" aria-label="Notifications">
+          <svg width="22" height="22" viewBox="0 0 24 24" stroke="#1e293b"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+          <span class="notification-dot"></span>
+        </button>
+        <div class="user-menu" id="userMenu" role="button" tabindex="0" aria-haspopup="true" aria-expanded="false">
+          <div class="user-avatar">A</div>
+          <span class="user-name">Admin</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" stroke="#475569"><polyline points="6 9 12 15 18 9"/></svg>
+          <div class="user-dropdown" id="userDropdown">
+            <a href="users-detail.html">Profil</a>
+            <a href="users-detail.html">Pengaturan</a>
+            <a href="#" onclick="sessionStorage.removeItem('loggedIn');location.href='index.html';return false;">Keluar</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Settings -->
+    <div class="settings-container">
+      <!-- Profile Form -->
+      <div class="settings-card">
+        <div class="card-title">Profile Information</div>
+
+        <!-- Success feedback -->
+        <div class="feedback success" id="profileFeedback">
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          <span id="profileFeedbackText">Profile updated successfully.</span>
+        </div>
+
+        <form id="profileForm" novalidate>
+          <div class="form-group">
+            <label for="profileName">Full Name</label>
+            <input type="text" id="profileName" value="Admin Utama" required />
+            <div class="form-error" id="profileNameError"></div>
+          </div>
+
+          <div class="form-group">
+            <label for="profileEmail">Email Address</label>
+            <input type="email" id="profileEmail" value="admin@etalio.com" required />
+            <div class="form-error" id="profileEmailError"></div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn-primary" id="profileSaveBtn">
+              <span id="profileSaveText">Save Changes</span>
+              <span id="profileSaveSpinner" class="spinner" style="display:none;"></span>
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Password Change -->
+      <div class="settings-card">
+        <div class="card-title">Change Password</div>
+
+        <!-- Password feedback -->
+        <div class="feedback success" id="passwordFeedback">
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          <span id="passwordFeedbackText">Password changed successfully.</span>
+        </div>
+
+        <form id="passwordForm" novalidate>
+          <div class="form-group">
+            <label for="currentPassword">Current Password</label>
+            <div class="password-wrapper">
+              <input type="password" id="currentPassword" placeholder="Enter current password" required />
+              <button type="button" class="toggle-password" data-target="currentPassword" aria-label="Toggle password visibility">
+                <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+            <div class="form-error" id="currentPasswordError"></div>
+          </div>
+
+          <div class="form-group">
+            <label for="newPassword">New Password</label>
+            <div class="password-wrapper">
+              <input type="password" id="newPassword" placeholder="Minimal 6 characters" required />
+              <button type="button" class="toggle-password" data-target="newPassword" aria-label="Toggle password visibility">
+                <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+            <div class="form-error" id="newPasswordError"></div>
+          </div>
+
+          <div class="form-group">
+            <label for="confirmPassword">Confirm New Password</label>
+            <div class="password-wrapper">
+              <input type="password" id="confirmPassword" placeholder="Confirm new password" required />
+              <button type="button" class="toggle-password" data-target="confirmPassword" aria-label="Toggle password visibility">
+                <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+            <div class="form-error" id="confirmPasswordError"></div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn-primary" id="passwordSaveBtn">
+              <span id="passwordSaveText">Change Password</span>
+              <span id="passwordSaveSpinner" class="spinner" style="display:none;"></span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    (function() {
+      // ---------- MOCK DATA ----------
+      const mockUser = {
+        name: 'Admin Utama',
+        email: 'admin@etalio.com',
+        password: 'password123' // mock current password
+      };
+
+      // ---------- DOM REFS ----------
+      // Profile
+      const profileForm = document.getElementById('profileForm');
+      const profileName = document.getElementById('profileName');
+      const profileEmail = document.getElementById('profileEmail');
+      const profileNameError = document.getElementById('profileNameError');
+      const profileEmailError = document.getElementById('profileEmailError');
+      const profileSaveBtn = document.getElementById('profileSaveBtn');
+      const profileSaveText = document.getElementById('profileSaveText');
+      const profileSaveSpinner = document.getElementById('profileSaveSpinner');
+      const profileFeedback = document.getElementById('profileFeedback');
+      const profileFeedbackText = document.getElementById('profileFeedbackText');
+
+      // Password
+      const passwordForm = document.getElementById('passwordForm');
+      const currentPassword = document.getElementById('currentPassword');
+      const newPassword = document.getElementById('newPassword');
+      const confirmPassword = document.getElementById('confirmPassword');
+      const currentPasswordError = document.getElementById('currentPasswordError');
+      const newPasswordError = document.getElementById('newPasswordError');
+      const confirmPasswordError = document.getElementById('confirmPasswordError');
+      const passwordSaveBtn = document.getElementById('passwordSaveBtn');
+      const passwordSaveText = document.getElementById('passwordSaveText');
+      const passwordSaveSpinner = document.getElementById('passwordSaveSpinner');
+      const passwordFeedback = document.getElementById('passwordFeedback');
+      const passwordFeedbackText = document.getElementById('passwordFeedbackText');
+
+      // ---------- TOGGLE PASSWORD ----------
+      document.querySelectorAll('.toggle-password').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          e.preventDefault();
+          const targetId = this.getAttribute('data-target');
+          const input = document.getElementById(targetId);
+          if (!input) return;
+          const isPassword = input.type === 'password';
+          input.type = isPassword ? 'text' : 'password';
+          // update icon
+          const svg = this.querySelector('svg');
+          if (svg) {
+            if (isPassword) {
+              svg.innerHTML =
+                `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/><line x1="4.22" y1="4.22" x2="19.78" y2="19.78"/>`;
+            } else {
+              svg.innerHTML =
+                `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>`;
+            }
+          }
+        });
+      });
+
+      // ---------- PROFILE SAVE ----------
+      profileForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        // reset errors & feedback
+        profileNameError.textContent = '';
+        profileEmailError.textContent = '';
+        profileFeedback.classList.remove('show');
+        profileName.classList.remove('error');
+        profileEmail.classList.remove('error');
+
+        let isValid = true;
+
+        const name = profileName.value.trim();
+        if (!name) {
+          profileNameError.textContent = 'Name is required.';
+          profileName.classList.add('error');
+          isValid = false;
+        }
+
+        const email = profileEmail.value.trim();
+        if (!email) {
+          profileEmailError.textContent = 'Email is required.';
+          profileEmail.classList.add('error');
+          isValid = false;
+        } else if (!email.includes('@') || !email.includes('.')) {
+          profileEmailError.textContent = 'Enter a valid email address.';
+          profileEmail.classList.add('error');
+          isValid = false;
+        }
+
+        if (!isValid) return;
+
+        // loading
+        profileSaveBtn.disabled = true;
+        profileSaveText.textContent = 'Saving...';
+        profileSaveSpinner.style.display = 'inline-block';
+
+        // mock API
+        setTimeout(() => {
+          mockUser.name = name;
+          mockUser.email = email;
+
+          // reset loading
+          profileSaveBtn.disabled = false;
+          profileSaveText.textContent = 'Save Changes';
+          profileSaveSpinner.style.display = 'none';
+
+          // show success
+          profileFeedbackText.textContent = 'Profile updated successfully.';
+          profileFeedback.classList.add('show');
+
+          // auto hide after 4s
+          setTimeout(() => {
+            profileFeedback.classList.remove('show');
+          }, 4000);
+        }, 1200);
+      });
+
+      // ---------- PASSWORD SAVE ----------
+      passwordForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        // reset errors & feedback
+        currentPasswordError.textContent = '';
+        newPasswordError.textContent = '';
+        confirmPasswordError.textContent = '';
+        passwordFeedback.classList.remove('show');
+        currentPassword.classList.remove('error');
+        newPassword.classList.remove('error');
+        confirmPassword.classList.remove('error');
+
+        let isValid = true;
+
+        const current = currentPassword.value;
+        const newPwd = newPassword.value;
+        const confirmPwd = confirmPassword.value;
+
+        // validate current password
+        if (!current) {
+          currentPasswordError.textContent = 'Current password is required.';
+          currentPassword.classList.add('error');
+          isValid = false;
+        } else if (current !== mockUser.password) {
+          currentPasswordError.textContent = 'Current password is incorrect.';
+          currentPassword.classList.add('error');
+          isValid = false;
+        }
+
+        // validate new password
+        if (!newPwd) {
+          newPasswordError.textContent = 'New password is required.';
+          newPassword.classList.add('error');
+          isValid = false;
+        } else if (newPwd.length < 6) {
+          newPasswordError.textContent = 'Password must be at least 6 characters.';
+          newPassword.classList.add('error');
+          isValid = false;
+        }
+
+        // validate confirm
+        if (!confirmPwd) {
+          confirmPasswordError.textContent = 'Please confirm your new password.';
+          confirmPassword.classList.add('error');
+          isValid = false;
+        } else if (newPwd !== confirmPwd) {
+          confirmPasswordError.textContent = 'Passwords do not match.';
+          confirmPassword.classList.add('error');
+          isValid = false;
+        }
+
+        if (!isValid) return;
+
+        // loading
+        passwordSaveBtn.disabled = true;
+        passwordSaveText.textContent = 'Changing...';
+        passwordSaveSpinner.style.display = 'inline-block';
+
+        // mock API
+        setTimeout(() => {
+          // update mock password
+          mockUser.password = newPwd;
+
+          // reset loading
+          passwordSaveBtn.disabled = false;
+          passwordSaveText.textContent = 'Change Password';
+          passwordSaveSpinner.style.display = 'none';
+
+          // clear fields
+          currentPassword.value = '';
+          newPassword.value = '';
+          confirmPassword.value = '';
+
+          // show success
+          passwordFeedbackText.textContent = 'Password changed successfully.';
+          passwordFeedback.classList.add('show');
+
+          setTimeout(() => {
+            passwordFeedback.classList.remove('show');
+          }, 4000);
+        }, 1400);
+      });
+
+      // ---------- SIDEBAR TOGGLE ----------
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('overlay');
+      const menuToggle = document.getElementById('menuToggle');
+
+      function toggleSidebar(forceState) {
+        const isOpen = (forceState !== undefined) ? forceState : !sidebar.classList.contains('open');
+        sidebar.classList.toggle('open', isOpen);
+        overlay.classList.toggle('show', isOpen);
+        menuToggle.setAttribute('aria-expanded', isOpen);
+      }
+
+      menuToggle.addEventListener('click', function(e) {
+        e.stopPropagation();
+        toggleSidebar();
+      });
+
+      overlay.addEventListener('click', function() {
+        toggleSidebar(false);
+      });
+
+      window.addEventListener('resize', function() {
+        if (window.innerWidth > 768) {
+          sidebar.classList.remove('open');
+          overlay.classList.remove('show');
+          menuToggle.setAttribute('aria-expanded', 'false');
+        }
+      });
+
+      // ---------- USER DROPDOWN ----------
+      const userMenu = document.getElementById('userMenu');
+      const userDropdown = document.getElementById('userDropdown');
+
+      userMenu.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const expanded = userMenu.getAttribute('aria-expanded') === 'true';
+        userMenu.setAttribute('aria-expanded', !expanded);
+        userDropdown.classList.toggle('show');
+      });
+
+      document.addEventListener('click', function(e) {
+        if (!userMenu.contains(e.target)) {
+          userMenu.setAttribute('aria-expanded', 'false');
+          userDropdown.classList.remove('show');
+        }
+      });
+
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          userMenu.setAttribute('aria-expanded', 'false');
+          userDropdown.classList.remove('show');
+          if (sidebar.classList.contains('open')) toggleSidebar(false);
+        }
+      });
+
+      // ---------- INIT: clear feedback on mount ----------
+      profileFeedback.classList.remove('show');
+      passwordFeedback.classList.remove('show');
+    })();
+  </script>
+  <script>if(sessionStorage.getItem('loggedIn')!=='true')location.href='index.html';</script>
+</body>
+</html>

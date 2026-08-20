@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ETALIO · Product Form</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
+  <style>
+    /* ---------- RESET & VARIABLES ---------- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --slate-50: #f8fafc;
+      --slate-200: #e2e8f0;
+      --slate-600: #475569;
+      --slate-700: #334155;
+      --slate-800: #1e293b;
+      --slate-900: #0f172a;
+      --white: #ffffff;
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.02);
+      --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.04);
+      --radius: 0.75rem;
+      --success: #22c55e;
+      --danger: #dc2626;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--slate-50);
+      color: var(--slate-900);
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ---------- SIDEBAR ---------- */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 260px;
+      height: 100vh;
+      background: var(--white);
+      border-right: 1px solid var(--slate-200);
+      padding: 1.5rem 1rem;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.25s ease;
+      z-index: 50;
+      overflow-y: auto;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .sidebar-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 2.5rem;
+      padding-left: 0.25rem;
+    }
+
+    .brand-icon {
+      width: 2.4rem;
+      height: 2.4rem;
+      background: var(--primary);
+      border-radius: 0.65rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .brand-word {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .brand-word span {
+      color: var(--primary);
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .sidebar-nav a {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.7rem 0.9rem;
+      border-radius: var(--radius);
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--slate-700);
+      text-decoration: none;
+      transition: background 0.12s, color 0.12s;
+    }
+
+    .sidebar-nav a:hover {
+      background: #f1f5f9;
+      color: var(--slate-900);
+    }
+    .sidebar-nav a.active {
+      background: #eef2ff;
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .sidebar-nav a svg {
+      width: 1.25rem;
+      height: 1.25rem;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      flex-shrink: 0;
+    }
+
+    .sidebar-footer {
+      border-top: 1px solid #eef2f6;
+      padding-top: 1.2rem;
+      font-size: 0.75rem;
+      color: var(--slate-600);
+    }
+
+    /* ---------- MAIN CONTENT ---------- */
+    .main {
+      margin-left: 260px;
+      flex: 1;
+      padding: 1.5rem 2rem 2.5rem;
+      min-height: 100vh;
+      transition: margin 0.2s;
+    }
+
+    /* ---------- TOP NAVBAR ---------- */
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .menu-toggle {
+      background: transparent;
+      border: none;
+      font-size: 1.6rem;
+      padding: 0.2rem 0.4rem;
+      cursor: pointer;
+      color: var(--slate-800);
+      display: none;
+      border-radius: 0.5rem;
+      line-height: 1;
+    }
+    .menu-toggle:hover {
+      background: #f1f5f9;
+    }
+
+    .page-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    .notification-btn {
+      background: transparent;
+      border: none;
+      padding: 0.4rem;
+      cursor: pointer;
+      border-radius: 9999px;
+      transition: background 0.12s;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .notification-btn:hover {
+      background: #f1f5f9;
+    }
+    .notification-dot {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      width: 0.6rem;
+      height: 0.6rem;
+      background: var(--danger);
+      border-radius: 999px;
+      border: 2px solid white;
+    }
+
+    .user-menu {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      cursor: pointer;
+      padding: 0.25rem 0.6rem 0.25rem 0.8rem;
+      border-radius: 2rem;
+      background: white;
+      border: 1px solid var(--slate-200);
+      transition: border 0.1s;
+      user-select: none;
+    }
+    .user-menu:hover {
+      border-color: #94a3b8;
+    }
+
+    .user-avatar {
+      width: 2rem;
+      height: 2rem;
+      background: var(--primary);
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+      font-size: 0.8rem;
+    }
+    .user-name {
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+
+    .user-dropdown {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      background: white;
+      border: 1px solid var(--slate-200);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-md);
+      min-width: 160px;
+      padding: 0.3rem 0;
+      display: none;
+      z-index: 60;
+    }
+    .user-dropdown.show {
+      display: block;
+    }
+    .user-dropdown a {
+      display: block;
+      padding: 0.5rem 1.2rem;
+      font-size: 0.85rem;
+      color: var(--slate-800);
+      text-decoration: none;
+      transition: background 0.08s;
+    }
+    .user-dropdown a:hover {
+      background: #f1f5f9;
+    }
+
+    /* ---------- FORM CONTAINER ---------- */
+    .form-container {
+      background: white;
+      border: 1px solid var(--slate-200);
+      border-radius: var(--radius);
+      padding: 1.8rem 2rem 2rem;
+      box-shadow: var(--shadow-sm);
+      max-width: 820px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .form-group label {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--slate-800);
+    }
+
+    .form-group .hint {
+      font-size: 0.7rem;
+      color: var(--slate-600);
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      padding: 0.6rem 0.8rem;
+      border: 1px solid var(--slate-200);
+      border-radius: var(--radius);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      background: white;
+      color: var(--slate-800);
+      transition: border 0.12s, box-shadow 0.12s;
+      width: 100%;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    /* ---------- CHECKBOX ---------- */
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin: 0.5rem 0 0.8rem;
+    }
+
+    .checkbox-group input[type="checkbox"] {
+      width: 1.1rem;
+      height: 1.1rem;
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+
+    .checkbox-group label {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--slate-800);
+      cursor: pointer;
+    }
+
+    /* ---------- VARIANTS ---------- */
+    .variant-section {
+      border-top: 1px solid var(--slate-200);
+      padding-top: 1.2rem;
+      margin-top: 0.5rem;
+    }
+
+    .variant-section.hidden {
+      display: none;
+    }
+
+    .variant-item {
+      display: grid;
+      grid-template-columns: 1fr 1fr 0.8fr 0.8fr auto;
+      gap: 0.8rem;
+      align-items: end;
+      padding: 0.8rem;
+      background: #fafbfc;
+      border-radius: var(--radius);
+      border: 1px solid var(--slate-200);
+      margin-bottom: 0.8rem;
+    }
+
+    .variant-item .form-group {
+      margin-bottom: 0;
+    }
+
+    .btn-remove-variant {
+      background: transparent;
+      border: 1px solid #fee2e2;
+      color: #991b1b;
+      padding: 0.3rem 0.7rem;
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-size: 0.8rem;
+      transition: background 0.1s;
+      align-self: end;
+      height: 2.6rem;
+    }
+
+    .btn-remove-variant:hover {
+      background: #fee2e2;
+    }
+
+    .btn-add-variant {
+      background: transparent;
+      border: 1px dashed var(--slate-200);
+      padding: 0.6rem 1.2rem;
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-size: 0.85rem;
+      color: var(--slate-700);
+      transition: background 0.1s, border-color 0.1s;
+      width: 100%;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .btn-add-variant:hover {
+      background: #f8fafc;
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    /* ---------- MEDIA UPLOAD ---------- */
+    .media-upload {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .media-preview {
+      width: 80px;
+      height: 80px;
+      border-radius: var(--radius);
+      border: 1px solid var(--slate-200);
+      background: #fafbfc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .media-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .media-preview .placeholder {
+      font-size: 0.7rem;
+      color: var(--slate-600);
+      text-align: center;
+    }
+
+    .media-upload input[type="file"] {
+      padding: 0.4rem 0;
+      border: none;
+      font-size: 0.85rem;
+    }
+
+    /* ---------- FORM ACTIONS ---------- */
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--slate-200);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid var(--slate-200);
+      padding: 0.6rem 1.8rem;
+      border-radius: var(--radius);
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.1s;
+      font-family: 'Inter', sans-serif;
+      color: var(--slate-700);
+    }
+
+    .btn-secondary:hover {
+      background: #f1f5f9;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.6rem 2rem;
+      border-radius: var(--radius);
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.12s, box-shadow 0.12s;
+      font-family: 'Inter', sans-serif;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-hover);
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 1rem;
+      height: 1rem;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .error-text {
+      color: var(--danger);
+      font-size: 0.75rem;
+      margin-top: 0.2rem;
+    }
+
+    /* ---------- RESPONSIVE ---------- */
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+      }
+      .sidebar.open {
+        transform: translateX(0);
+      }
+      .main {
+        margin-left: 0;
+        padding: 1rem 1rem 2rem;
+      }
+      .menu-toggle {
+        display: inline-block;
+      }
+      .page-title {
+        font-size: 1.2rem;
+      }
+      .form-container {
+        padding: 1.2rem;
+      }
+      .form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+      .variant-item {
+        grid-template-columns: 1fr 1fr;
+        gap: 0.6rem;
+      }
+      .variant-item .btn-remove-variant {
+        grid-column: span 2;
+        height: auto;
+      }
+      .form-actions {
+        flex-direction: column-reverse;
+      }
+      .form-actions button {
+        width: 100%;
+        justify-content: center;
+      }
+      .topbar-right {
+        gap: 0.75rem;
+      }
+      .user-name {
+        display: none;
+      }
+      .media-upload {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+    /* overlay */
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.08);
+      z-index: 40;
+    }
+    .overlay.show {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <!-- overlay mobile -->
+  <div class="overlay" id="overlay"></div>
+
+  <!-- ===== SIDEBAR ===== -->
+  <aside class="sidebar" id="sidebar" role="navigation" aria-label="Sidebar navigation">
+    <div class="sidebar-brand">
+      <div class="brand-icon">E</div>
+      <div class="brand-word">ETAL<span>IO</span></div>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="index.html">
+        <svg viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0a1 1 0 01-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 01-1 1"/></svg>
+        Dashboard
+      </a>
+      <a href="orders.html">
+        <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
+        Orders
+      </a>
+      <a href="products.html" class="active">
+        <svg viewBox="0 0 24 24"><path d="M12 2v20M2 12h20"/></svg>
+        Products
+      </a>
+      <a href="customers.html">
+        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        Customers
+      </a>
+      <a href="payments.html">
+        <svg viewBox="0 0 24 24"><path d="M12 2v20M2 12h20"/></svg>
+        Payments
+      </a>
+      <a href="users.html">
+        <svg viewBox="0 0 24 24"><path d="M12 2v20M2 12h20"/></svg>
+        Users
+      </a>
+    </nav>
+    <div class="sidebar-footer">ETALIO v1.0 · Internal</div>
+  </aside>
+
+  <!-- ===== MAIN ===== -->
+  <main class="main" id="mainContent">
+    <!-- Topbar -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation menu" aria-expanded="false">☰</button>
+        <h1 class="page-title" id="formTitle">Create Product</h1>
+      </div>
+      <div class="topbar-right">
+        <button class="notification-btn" aria-label="Notifications">
+          <svg width="22" height="22" viewBox="0 0 24 24" stroke="#1e293b"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+          <span class="notification-dot"></span>
+        </button>
+        <div class="user-menu" id="userMenu" role="button" tabindex="0" aria-haspopup="true" aria-expanded="false">
+          <div class="user-avatar">A</div>
+          <span class="user-name">Admin</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" stroke="#475569"><polyline points="6 9 12 15 18 9"/></svg>
+          <div class="user-dropdown" id="userDropdown">
+            <a href="users-detail.html">Profil</a>
+            <a href="users-detail.html">Pengaturan</a>
+            <a href="#" onclick="sessionStorage.removeItem('loggedIn');location.href='index.html';return false;">Keluar</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Form -->
+    <div class="form-container">
+      <form id="productForm" novalidate>
+        <!-- Product Name -->
+        <div class="form-group">
+          <label for="productName">Product Name</label>
+          <input type="text" id="productName" placeholder="e.g. Kopi Arabika Premium" required />
+          <div class="error-text" id="nameError"></div>
+        </div>
+
+        <!-- Type & Category -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="productType">Product Type</label>
+            <select id="productType">
+              <option value="physical">Physical</option>
+              <option value="digital">Digital</option>
+              <option value="service">Service</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="category">Category</label>
+            <select id="category">
+              <option value="Food & Beverage">Food & Beverage</option>
+              <option value="Packaging">Packaging</option>
+              <option value="Digital">Digital</option>
+              <option value="Tools">Tools</option>
+              <option value="Others">Others</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Description -->
+        <div class="form-group">
+          <label for="description">Description</label>
+          <textarea id="description" placeholder="Product description..."></textarea>
+        </div>
+
+        <!-- Price & Stock -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="price">Price</label>
+            <input type="number" id="price" placeholder="0" min="0" step="1000" required />
+          </div>
+          <div class="form-group" id="stockGroup">
+            <label for="stock">Stock</label>
+            <input type="number" id="stock" placeholder="0" min="0" step="1" />
+          </div>
+        </div>
+
+        <!-- Has Variants -->
+        <div class="checkbox-group">
+          <input type="checkbox" id="hasVariants" />
+          <label for="hasVariants">Has Variants</label>
+        </div>
+
+        <!-- Variant Section -->
+        <div class="variant-section hidden" id="variantSection">
+          <div id="variantsContainer">
+            <!-- variant items rendered by JS -->
+          </div>
+          <button type="button" class="btn-add-variant" id="addVariantBtn">+ Add Variant</button>
+        </div>
+
+        <!-- Media Upload -->
+        <div class="form-group" style="margin-top:1.2rem;">
+          <label>Product Image</label>
+          <div class="media-upload">
+            <div class="media-preview" id="mediaPreview">
+              <span class="placeholder">No image</span>
+            </div>
+            <input type="file" id="imageUpload" accept="image/*" />
+          </div>
+        </div>
+
+        <!-- Status -->
+        <div class="form-group" style="margin-top:0.5rem;">
+          <label for="status">Status</label>
+          <select id="status">
+            <option value="draft">Draft</option>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
+        </div>
+
+        <!-- Actions -->
+        <div class="form-actions">
+          <button type="button" class="btn-secondary" id="cancelBtn">Cancel</button>
+          <button type="submit" class="btn-primary" id="saveBtn">
+            <span id="saveText">Save Product</span>
+            <span id="saveSpinner" class="spinner" style="display:none;"></span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <script>
+    (function() {
+      // ---------- MOCK DATA (for edit mode) ----------
+      const isEditMode = true; // set to false for create mode
+      const mockProduct = {
+        id: 1,
+        name: 'Kopi Arabika Premium',
+        type: 'physical',
+        category: 'Food & Beverage',
+        description: 'Kopi arabika pilihan dari dataran tinggi.',
+        price: 120000,
+        stock: 45,
+        hasVariants: true,
+        variants: [
+          { id: 1, color: 'Gold', size: '500g', price: 120000, stock: 20 },
+          { id: 2, color: 'Silver', size: '1kg', price: 220000, stock: 15 }
+        ],
+        status: 'active',
+        image: null // no image for mock
+      };
+
+      // ---------- DOM REFS ----------
+      const form = document.getElementById('productForm');
+      const formTitle = document.getElementById('formTitle');
+      const productName = document.getElementById('productName');
+      const productType = document.getElementById('productType');
+      const category = document.getElementById('category');
+      const description = document.getElementById('description');
+      const price = document.getElementById('price');
+      const stock = document.getElementById('stock');
+      const hasVariants = document.getElementById('hasVariants');
+      const variantSection = document.getElementById('variantSection');
+      const variantsContainer = document.getElementById('variantsContainer');
+      const addVariantBtn = document.getElementById('addVariantBtn');
+      const imageUpload = document.getElementById('imageUpload');
+      const mediaPreview = document.getElementById('mediaPreview');
+      const statusSelect = document.getElementById('status');
+      const cancelBtn = document.getElementById('cancelBtn');
+      const saveBtn = document.getElementById('saveBtn');
+      const saveText = document.getElementById('saveText');
+      const saveSpinner = document.getElementById('saveSpinner');
+      const nameError = document.getElementById('nameError');
+
+      // ---------- STATE ----------
+      let variants = [];
+      let variantIdCounter = 100;
+
+      // ---------- HELPERS ----------
+      function formatCurrency(amount) {
+        return 'Rp ' + Number(amount).toLocaleString('id-ID');
+      }
+
+      function renderVariants() {
+        if (variants.length === 0) {
+          variantsContainer.innerHTML =
+            `<div style="text-align:center; padding:1rem; color: var(--slate-600); font-size:0.85rem;">No variants added yet</div>`;
+          return;
+        }
+        variantsContainer.innerHTML = variants.map((v, index) => `
+            <div class="variant-item" data-index="${index}">
+              <div class="form-group">
+                <label>Color</label>
+                <input type="text" class="variant-color" value="${v.color || ''}" placeholder="e.g. Gold" />
+              </div>
+              <div class="form-group">
+                <label>Size</label>
+                <input type="text" class="variant-size" value="${v.size || ''}" placeholder="e.g. 500g" />
+              </div>
+              <div class="form-group">
+                <label>Price</label>
+                <input type="number" class="variant-price" value="${v.price || 0}" min="0" step="1000" />
+              </div>
+              <div class="form-group">
+                <label>Stock</label>
+                <input type="number" class="variant-stock" value="${v.stock || 0}" min="0" step="1" />
+              </div>
+              <button type="button" class="btn-remove-variant" data-index="${index}">Remove</button>
+            </div>
+          `).join('');
+
+        // attach remove events
+        variantsContainer.querySelectorAll('.btn-remove-variant').forEach(btn => {
+          btn.addEventListener('click', function() {
+            const idx = parseInt(this.getAttribute('data-index'));
+            variants.splice(idx, 1);
+            renderVariants();
+          });
+        });
+
+        // attach input events to sync data (optional)
+        variantsContainer.querySelectorAll('.variant-item').forEach((item, idx) => {
+          const color = item.querySelector('.variant-color');
+          const size = item.querySelector('.variant-size');
+          const price = item.querySelector('.variant-price');
+          const stock = item.querySelector('.variant-stock');
+          [color, size, price, stock].forEach(input => {
+            input.addEventListener('input', function() {
+              const v = variants[idx];
+              if (this.classList.contains('variant-color')) v.color = this.value;
+              if (this.classList.contains('variant-size')) v.size = this.value;
+              if (this.classList.contains('variant-price')) v.price = parseFloat(this.value) || 0;
+              if (this.classList.contains('variant-stock')) v.stock = parseInt(this.value) || 0;
+            });
+          });
+        });
+      }
+
+      function addVariant(color = '', size = '', price = 0, stock = 0) {
+        variants.push({
+          id: variantIdCounter++,
+          color: color,
+          size: size,
+          price: price,
+          stock: stock
+        });
+        renderVariants();
+      }
+
+      // ---------- TOGGLE VARIANTS ----------
+      function toggleVariants(show) {
+        if (show) {
+          variantSection.classList.remove('hidden');
+          stock.parentElement.style.display = 'none';
+          stock.value = 0;
+        } else {
+          variantSection.classList.add('hidden');
+          stock.parentElement.style.display = 'block';
+          variants = [];
+          renderVariants();
+        }
+      }
+
+      hasVariants.addEventListener('change', function() {
+        toggleVariants(this.checked);
+      });
+
+      // ---------- ADD VARIANT BUTTON ----------
+      addVariantBtn.addEventListener('click', function() {
+        addVariant('', '', 0, 0);
+      });
+
+      // ---------- IMAGE PREVIEW ----------
+      imageUpload.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function(ev) {
+            mediaPreview.innerHTML = `<img src="${ev.target.result}" alt="Product preview" />`;
+          };
+          reader.readAsDataURL(file);
+        } else {
+          mediaPreview.innerHTML = `<span class="placeholder">No image</span>`;
+        }
+      });
+
+      // ---------- LOAD MOCK DATA (edit mode) ----------
+      function loadMockData() {
+        if (!isEditMode) return;
+        formTitle.textContent = 'Edit Product';
+        const p = mockProduct;
+        productName.value = p.name;
+        productType.value = p.type;
+        category.value = p.category;
+        description.value = p.description || '';
+        price.value = p.price;
+        stock.value = p.stock || 0;
+        hasVariants.checked = p.hasVariants;
+        statusSelect.value = p.status;
+
+        if (p.hasVariants && p.variants && p.variants.length > 0) {
+          toggleVariants(true);
+          variants = p.variants.map(v => ({
+            id: v.id || variantIdCounter++,
+            color: v.color || '',
+            size: v.size || '',
+            price: v.price || 0,
+            stock: v.stock || 0
+          }));
+          renderVariants();
+        } else {
+          toggleVariants(false);
+        }
+
+        // if image mock
+        if (p.image) {
+          mediaPreview.innerHTML = `<img src="${p.image}" alt="Product image" />`;
+        }
+      }
+
+      // ---------- FORM VALIDATION ----------
+      function validateForm() {
+        let isValid = true;
+        nameError.textContent = '';
+
+        const name = productName.value.trim();
+        if (!name) {
+          nameError.textContent = 'Product name is required.';
+          isValid = false;
+        }
+
+        if (!price.value || parseFloat(price.value) < 0) {
+          alert('Price must be a positive number.');
+          isValid = false;
+        }
+
+        if (!hasVariants.checked) {
+          if (!stock.value || parseInt(stock.value) < 0) {
+            alert('Stock must be a positive number.');
+            isValid = false;
+          }
+        } else {
+          // check variants have price and stock
+          for (let i = 0; i < variants.length; i++) {
+            const v = variants[i];
+            if (!v.color.trim() || !v.size.trim()) {
+              alert(`Variant #${i+1}: Color and Size are required.`);
+              isValid = false;
+              break;
+            }
+            if (v.price < 0 || v.stock < 0) {
+              alert(`Variant #${i+1}: Price and Stock must be positive.`);
+              isValid = false;
+              break;
+            }
+          }
+          if (variants.length === 0) {
+            alert('Please add at least one variant.');
+            isValid = false;
+          }
+        }
+
+        return isValid;
+      }
+
+      // ---------- SAVE (with loading) ----------
+      function handleSave(e) {
+        e.preventDefault();
+
+        if (!validateForm()) return;
+
+        // show loading
+        saveBtn.disabled = true;
+        saveText.textContent = 'Saving...';
+        saveSpinner.style.display = 'inline-block';
+
+        // mock API call
+        setTimeout(() => {
+          const formData = {
+            name: productName.value.trim(),
+            type: productType.value,
+            category: category.value,
+            description: description.value.trim(),
+            price: parseFloat(price.value) || 0,
+            stock: hasVariants.checked ? null : parseInt(stock.value) || 0,
+            hasVariants: hasVariants.checked,
+            variants: hasVariants.checked ? variants.map(v => ({
+              color: v.color,
+              size: v.size,
+              price: v.price,
+              stock: v.stock
+            })) : [],
+            status: statusSelect.value,
+          };
+
+          console.log('Product saved:', formData);
+          alert('Product saved successfully!\n' + JSON.stringify(formData, null, 2));
+
+          // reset loading
+          saveBtn.disabled = false;
+          saveText.textContent = 'Save Product';
+          saveSpinner.style.display = 'none';
+        }, 1200);
+      }
+
+      form.addEventListener('submit', handleSave);
+
+      // ---------- CANCEL ----------
+      cancelBtn.addEventListener('click', function() {
+        if (confirm('Discard changes?')) {
+          alert('Cancelled. Redirect to product list.');
+        }
+      });
+
+      // ---------- SIDEBAR TOGGLE ----------
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('overlay');
+      const menuToggle = document.getElementById('menuToggle');
+
+      function toggleSidebar(forceState) {
+        const isOpen = (forceState !== undefined) ? forceState : !sidebar.classList.contains('open');
+        sidebar.classList.toggle('open', isOpen);
+        overlay.classList.toggle('show', isOpen);
+        menuToggle.setAttribute('aria-expanded', isOpen);
+      }
+
+      menuToggle.addEventListener('click', function(e) {
+        e.stopPropagation();
+        toggleSidebar();
+      });
+
+      overlay.addEventListener('click', function() {
+        toggleSidebar(false);
+      });
+
+      window.addEventListener('resize', function() {
+        if (window.innerWidth > 768) {
+          sidebar.classList.remove('open');
+          overlay.classList.remove('show');
+          menuToggle.setAttribute('aria-expanded', 'false');
+        }
+      });
+
+      // ---------- USER DROPDOWN ----------
+      const userMenu = document.getElementById('userMenu');
+      const userDropdown = document.getElementById('userDropdown');
+
+      userMenu.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const expanded = userMenu.getAttribute('aria-expanded') === 'true';
+        userMenu.setAttribute('aria-expanded', !expanded);
+        userDropdown.classList.toggle('show');
+      });
+
+      document.addEventListener('click', function(e) {
+        if (!userMenu.contains(e.target)) {
+          userMenu.setAttribute('aria-expanded', 'false');
+          userDropdown.classList.remove('show');
+        }
+      });
+
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          userMenu.setAttribute('aria-expanded', 'false');
+          userDropdown.classList.remove('show');
+          if (sidebar.classList.contains('open')) toggleSidebar(false);
+        }
+      });
+
+      // ---------- INIT ----------
+      loadMockData();
+      if (!isEditMode) {
+        toggleVariants(false);
+        variants = [];
+        renderVariants();
+      }
+    })();
+  </script>
+  <script>if(sessionStorage.getItem('loggedIn')!=='true')location.href='index.html';</script>
+</body>
+</html>

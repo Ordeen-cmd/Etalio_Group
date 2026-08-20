@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>ETALIO · Masuk</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <style>
+    /* reset & base */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background-color: #f8fafc; /* slate-50 */
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      color: #0f172a; /* slate-900 */
+    }
+
+    .login-card {
+      max-width: 420px;
+      width: 100%;
+      background: #ffffff;
+      border-radius: 1rem; /* rounded-lg */
+      padding: 2.25rem 2rem 2.5rem;
+      box-shadow: 0 12px 40px rgba(15, 23, 42, 0.06), 0 4px 12px rgba(0, 0, 0, 0.03);
+      border: 1px solid #e2e8f0; /* slate-200 */
+      transition: box-shadow 0.15s ease;
+    }
+
+    @media (max-width: 480px) {
+      .login-card {
+        padding: 1.75rem 1.25rem 2rem;
+      }
+    }
+
+    /* logo & wordmark */
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .brand-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.5rem;
+      height: 2.5rem;
+      background: #4f46e5; /* indigo/royal blue */
+      border-radius: 0.65rem;
+      color: white;
+      font-weight: 700;
+      font-size: 1.3rem;
+      letter-spacing: -0.02em;
+      box-shadow: 0 4px 8px rgba(79, 70, 229, 0.15);
+    }
+
+    .brand-wordmark {
+      font-size: 1.75rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: #0f172a;
+      line-height: 1.2;
+    }
+
+    .brand-wordmark span {
+      color: #4f46e5;
+    }
+
+    .subtitle {
+      font-size: 0.95rem;
+      font-weight: 400;
+      color: #475569; /* slate-600 */
+      margin-top: -0.1rem;
+      margin-bottom: 2rem;
+      letter-spacing: 0.01em;
+      border-left: 3px solid #4f46e5;
+      padding-left: 0.75rem;
+    }
+
+    @media (max-width: 480px) {
+      .brand-wordmark {
+        font-size: 1.5rem;
+      }
+      .subtitle {
+        font-size: 0.85rem;
+        margin-bottom: 1.75rem;
+      }
+    }
+
+    /* form group */
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+
+    label {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #1e293b; /* slate-800 */
+      margin-bottom: 0.35rem;
+      letter-spacing: 0.01em;
+    }
+
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-wrapper input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      padding-right: 3rem;
+      font-size: 0.95rem;
+      font-family: 'Inter', sans-serif;
+      background: #ffffff;
+      border: 1px solid #e2e8f0; /* slate-200 */
+      border-radius: 0.75rem; /* rounded-lg */
+      transition: border 0.15s ease, box-shadow 0.15s ease;
+      color: #0f172a;
+      outline: none;
+      height: 3.25rem;
+    }
+
+    .input-wrapper input:focus {
+      border-color: #4f46e5;
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+    }
+
+    .input-wrapper input.input-error {
+      border-color: #dc2626; /* red-600 */
+      box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.12);
+    }
+
+    .input-wrapper input.input-error:focus {
+      border-color: #dc2626;
+      box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.18);
+    }
+
+    .input-wrapper input:disabled {
+      background-color: #f1f5f9;
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+
+    .toggle-password {
+      position: absolute;
+      right: 0.75rem;
+      background: transparent;
+      border: none;
+      padding: 0.4rem 0.4rem 0.4rem 0.8rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #64748b; /* slate-500 */
+      transition: color 0.15s;
+      font-size: 1.2rem;
+      line-height: 1;
+      border-radius: 0.5rem;
+    }
+
+    .toggle-password:hover {
+      color: #1e293b;
+    }
+
+    .toggle-password:focus-visible {
+      outline: 2px solid #4f46e5;
+      outline-offset: 2px;
+    }
+
+    .toggle-password svg {
+      width: 1.3rem;
+      height: 1.3rem;
+      display: block;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* validation & auth error */
+    .error-message {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      margin-top: 0.4rem;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: #dc2626;
+      min-height: 1.4rem;
+    }
+
+    .error-message.hidden {
+      display: none;
+    }
+
+    .error-message svg {
+      width: 1rem;
+      height: 1rem;
+      flex-shrink: 0;
+      stroke: #dc2626;
+      fill: none;
+      stroke-width: 2.5;
+    }
+
+    /* login button */
+    .login-btn {
+      width: 100%;
+      padding: 0.8rem 1.5rem;
+      margin-top: 0.75rem;
+      background: #4f46e5;
+      color: white;
+      font-weight: 600;
+      font-size: 1rem;
+      font-family: 'Inter', sans-serif;
+      border: none;
+      border-radius: 0.75rem;
+      cursor: pointer;
+      transition: background 0.15s ease, box-shadow 0.15s ease, opacity 0.15s;
+      box-shadow: 0 4px 10px rgba(79, 70, 229, 0.2);
+      height: 3.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+    }
+
+    .login-btn:hover:not(:disabled) {
+      background: #4338ca; /* indigo-700 */
+      box-shadow: 0 6px 14px rgba(79, 70, 229, 0.25);
+    }
+
+    .login-btn:active:not(:disabled) {
+      transform: scale(0.98);
+      background: #3730a3;
+    }
+
+    .login-btn:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .login-btn .spinner {
+      display: inline-block;
+      width: 1.2rem;
+      height: 1.2rem;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #ffffff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* a11y */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      border: 0;
+    }
+
+    /* subtle transition */
+    .fade-transition {
+      transition: opacity 0.15s ease, transform 0.1s ease;
+    }
+  </style>
+</head>
+<body>
+  <main class="login-card" role="main" aria-labelledby="login-heading">
+    <div class="brand">
+      <div class="brand-icon" aria-hidden="true">E</div>
+      <div class="brand-wordmark">ETAL<span>IO</span></div>
+    </div>
+    <div class="subtitle" id="login-heading">Sistem Operasional Bisnis Cerdas</div>
+
+    <form id="loginForm" novalidate autocomplete="off">
+      <!-- Email -->
+      <div class="form-group">
+        <label for="email">Email</label>
+        <div class="input-wrapper">
+          <input 
+            type="email" 
+            id="email" 
+            placeholder="nama@perusahaan.com" 
+            value=""
+            autocomplete="username"
+            aria-describedby="email-error"
+            required
+          >
+        </div>
+        <div id="email-error" class="error-message hidden" role="alert">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <span id="email-error-text">Email wajib diisi</span>
+        </div>
+      </div>
+
+      <!-- Password + show/hide -->
+      <div class="form-group">
+        <label for="password">Kata Sandi</label>
+        <div class="input-wrapper">
+          <input 
+            type="password" 
+            id="password" 
+            placeholder="Masukkan kata sandi" 
+            value=""
+            autocomplete="current-password"
+            aria-describedby="password-error"
+            required
+          >
+          <button 
+            type="button" 
+            class="toggle-password" 
+            id="togglePasswordBtn"
+            aria-label="Tampilkan atau sembunyikan kata sandi"
+            tabindex="0"
+          >
+            <svg viewBox="0 0 24 24" id="eyeIcon">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+          </button>
+        </div>
+        <div id="password-error" class="error-message hidden" role="alert">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <span id="password-error-text">Kata sandi minimal 6 karakter</span>
+        </div>
+      </div>
+
+      <!-- Authentication error (global) -->
+      <div id="auth-error" class="error-message hidden" style="margin-bottom: 0.75rem;" role="alert">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span id="auth-error-text">Email atau kata sandi salah</span>
+      </div>
+
+      <!-- Login button -->
+      <button type="submit" class="login-btn" id="loginBtn">
+        <span id="btn-text">Masuk</span>
+        <span id="btn-spinner" class="spinner" style="display: none;"></span>
+      </button>
+    </form>
+  </main>
+
+  <script>
+    (function() {
+      const form = document.getElementById('loginForm');
+      const emailInput = document.getElementById('email');
+      const passwordInput = document.getElementById('password');
+      const emailError = document.getElementById('email-error');
+      const emailErrorText = document.getElementById('email-error-text');
+      const passwordError = document.getElementById('password-error');
+      const passwordErrorText = document.getElementById('password-error-text');
+      const authError = document.getElementById('auth-error');
+      const authErrorText = document.getElementById('auth-error-text');
+      const loginBtn = document.getElementById('loginBtn');
+      const btnText = document.getElementById('btn-text');
+      const btnSpinner = document.getElementById('btn-spinner');
+      const toggleBtn = document.getElementById('togglePasswordBtn');
+      const eyeIcon = document.getElementById('eyeIcon');
+
+      // --- helpers ---
+      function setLoading(isLoading) {
+        if (isLoading) {
+          loginBtn.disabled = true;
+          btnText.textContent = 'Memproses';
+          btnSpinner.style.display = 'inline-block';
+        } else {
+          loginBtn.disabled = false;
+          btnText.textContent = 'Masuk';
+          btnSpinner.style.display = 'none';
+        }
+      }
+
+      function hideAllErrors() {
+        emailError.classList.add('hidden');
+        passwordError.classList.add('hidden');
+        authError.classList.add('hidden');
+        // remove error styling
+        emailInput.classList.remove('input-error');
+        passwordInput.classList.remove('input-error');
+      }
+
+      function showFieldError(inputEl, errorEl, message) {
+        inputEl.classList.add('input-error');
+        errorEl.classList.remove('hidden');
+        const textSpan = errorEl.querySelector('span');
+        if (textSpan) textSpan.textContent = message;
+      }
+
+      // --- validation (client side) ---
+      function validateEmail(value) {
+        const trimmed = value.trim();
+        if (trimmed === '') return { valid: false, message: 'Email wajib diisi' };
+        // basic email format
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(trimmed)) return { valid: false, message: 'Masukkan email yang valid' };
+        return { valid: true };
+      }
+
+      function validatePassword(value) {
+        if (value.length === 0) return { valid: false, message: 'Kata sandi wajib diisi' };
+        if (value.length < 6) return { valid: false, message: 'Kata sandi minimal 6 karakter' };
+        return { valid: true };
+      }
+
+      // --- realtime validation on blur (clear errors on input) ---
+      function clearFieldErrorOnInput(inputEl, errorEl) {
+        inputEl.addEventListener('input', function() {
+          if (errorEl.classList.contains('hidden') === false) {
+            errorEl.classList.add('hidden');
+            inputEl.classList.remove('input-error');
+          }
+          // also hide auth error when user types
+          if (!authError.classList.contains('hidden')) {
+            authError.classList.add('hidden');
+          }
+        });
+      }
+
+      clearFieldErrorOnInput(emailInput, emailError);
+      clearFieldErrorOnInput(passwordInput, passwordError);
+
+      // also hide auth error on any input
+      [emailInput, passwordInput].forEach(input => {
+        input.addEventListener('input', function() {
+          if (!authError.classList.contains('hidden')) {
+            authError.classList.add('hidden');
+          }
+        });
+      });
+
+      // --- show/hide password (toggle) ---
+      let passwordVisible = false;
+      toggleBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        passwordVisible = !passwordVisible;
+        passwordInput.type = passwordVisible ? 'text' : 'password';
+        // update icon (simple eye / eye-off)
+        if (passwordVisible) {
+          eyeIcon.innerHTML = `
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+            <circle cx="12" cy="12" r="3"/>
+            <line x1="4.22" y1="4.22" x2="19.78" y2="19.78"/>
+          `;
+        } else {
+          eyeIcon.innerHTML = `
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+            <circle cx="12" cy="12" r="3"/>
+          `;
+        }
+      });
+
+      // --- mock authentication ---
+      function mockAuthenticate(email, password) {
+        return new Promise((resolve, reject) => {
+          // simulate network delay 1.2s - 1.8s
+          const delay = 1200 + Math.random() * 600;
+          setTimeout(() => {
+            // hardcoded valid: admin@etalio.com / password123
+            const validEmail = 'admin@etalio.com';
+            const validPass = 'password123';
+            if (email.trim().toLowerCase() === validEmail && password === validPass) {
+              resolve({ success: true });
+            } else {
+              reject({ message: 'Email atau kata sandi salah' });
+            }
+          }, delay);
+        });
+      }
+
+      // --- form submit ---
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        // reset errors
+        hideAllErrors();
+
+        const email = emailInput.value;
+        const password = passwordInput.value;
+
+        // 1. validasi client
+        const emailCheck = validateEmail(email);
+        const passwordCheck = validatePassword(password);
+
+        let hasError = false;
+
+        if (!emailCheck.valid) {
+          showFieldError(emailInput, emailError, emailCheck.message);
+          hasError = true;
+        }
+        if (!passwordCheck.valid) {
+          showFieldError(passwordInput, passwordError, passwordCheck.message);
+          hasError = true;
+        }
+
+        if (hasError) {
+          // fokus ke field error pertama
+          if (!emailCheck.valid) {
+            emailInput.focus();
+          } else if (!passwordCheck.valid) {
+            passwordInput.focus();
+          }
+          return;
+        }
+
+        // 2. loading state
+        setLoading(true);
+        authError.classList.add('hidden'); // sembunyikan auth error lama
+
+        // 3. mock auth
+        mockAuthenticate(email, password)
+          .then(() => {
+            // success: redirect (simulasi)
+            setLoading(false);
+            // reset form & beri notifikasi sukses (redirect ke dashboard)
+            // Karena ini prototype, kita tampilkan alert & redirect
+            alert('✅ Login berhasil! (simulasi) — Redirect ke dashboard ETALIO.');
+            // reset state
+            form.reset();
+            hideAllErrors();
+            // optional: clear password field
+            passwordInput.value = '';
+            // untuk demo, kita reload state
+            setLoading(false);
+          })
+          .catch((err) => {
+            // auth error
+            setLoading(false);
+            authError.classList.remove('hidden');
+            authErrorText.textContent = err.message || 'Email atau kata sandi salah';
+            // highlight both fields
+            emailInput.classList.add('input-error');
+            passwordInput.classList.add('input-error');
+            // fokus ke email
+            emailInput.focus();
+          });
+      });
+
+      // --- optional: enter key support (already handled by form) ---
+
+      // --- tambahan: reset loading jika komponen unmount (tidak ada) ---
+
+      // --- initial: pastikan tidak ada error tampil ---
+      hideAllErrors();
+      setLoading(false);
+    })();
+  </script>
+</body>
+</html>
